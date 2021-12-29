@@ -69,7 +69,7 @@ class LoginActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    var userName = email.split(".")[0]
+                    var userName = email.split("@")[0]
                     var dashboardIntent = Intent(this, MainActivity::class.java)
                     dashboardIntent.putExtra("name", userName)
                     dashboardIntent.putExtra("email", email)

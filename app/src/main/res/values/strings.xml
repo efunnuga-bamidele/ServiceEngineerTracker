@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Service Job Tracker</string>
+    <string name="username">Default Username</string>
+    <string name="useremail">defaultusername@mail.com</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <!--    Nav items-->
+    <string name="dashboard">Dashboard</string>
+    <string name="create_job">Create Job</string>
+    <string name="view_active_job">View Active Job</string>
+    <string name="job_history">Job History</string>
+    <!--  Nav items Settings-->
+    <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
+    <!--  Nav items Settings-->
+    <string name="jobtype">Job Type</string>
+    <string name="language">Language</string>
+
+    <!--  Nav items Admin Settings-->
+    <string name="manageusers">Manage Users</string>
+    <string name="customers">Manage Customers</string>
+    <string name="occupancy">Occupancy Report</string>
+    <string name="managedb">Manage Database</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

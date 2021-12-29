@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_dashboard"
+            android:title="@string/dashboard"
+            android:icon="@drawable/ic_baseline_dashboard_24"
+            />
+        <item
+            android:id="@+id/nav_create_job"
+            android:title="@string/create_job"
+            android:icon="@drawable/ic_baseline_create_new_folder_24"
+            />
+        <item
+            android:id="@+id/nav_view_active_job"
+            android:title="@string/view_active_job"
+            android:icon="@drawable/ic_baseline_category_24"
+            />
+        <item
+            android:id="@+id/nav_jobHistory"
+            android:title="@string/job_history"
+            android:icon="@drawable/ic_baseline_preview_24"
+            />
+
+    </group>
+    <item android:title="General Settings">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_jobType"
+                    android:title="@string/jobtype"
+                    android:icon="@drawable/ic_baseline_table_view_24"
+                    />
+                <item
+                    android:id="@+id/nav_language"
+                    android:title="@string/language"
+                    android:icon="@drawable/ic_baseline_language_24"
+                    />
+            </group>
+        </menu>
+
+    </item>
+
+    <item android:title="Administrator Settings">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_manageusers"
+                    android:title="@string/manageusers"
+                    android:icon="@drawable/ic_baseline_people_alt_24"
+                    />
+                <item
+                    android:id="@+id/nav_customers"
+                    android:title="@string/customers"
+                    android:icon="@drawable/ic_baseline_supervised_user_circle_24"
+                    />
+                <item
+                    android:id="@+id/nav_occupancy"
+                    android:title="@string/occupancy"
+                    android:icon="@drawable/ic_baseline_preview_24"
+                    />
+                <item
+                    android:id="@+id/nav_managedb"
+                    android:title="@string/managedb"
+                    android:icon="@drawable/ic_baseline_storage_24"
+                    />
+            </group>
+        </menu>
+
+    </item>
+
+    <item android:title="Profile Settings">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_profile"
+                    android:title="@string/profile"
+                    android:icon="@drawable/ic_baseline_person_search_24"
+                    />
+                <item
+                    android:id="@+id/nav_logout"
+                    android:title="@string/logout"
+                    android:icon="@drawable/ic_baseline_login_24"
+                    />
+            </group>
+        </menu>
+
+    </item>
+</menu>
