@@ -14,6 +14,8 @@ import com.bjtmtech.servicejobtracker.databinding.ActivityRegisterBinding
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class LoginActivity : AppCompatActivity() {
@@ -25,8 +27,9 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         auth = FirebaseAuth.getInstance()
+
+        onStart() //check if user session is still logged in and go to dashboard
 
         val registerButton = findViewById<TextView>(R.id.registerUser)
 
@@ -56,6 +59,24 @@ class LoginActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = auth.currentUser
+        if(currentUser != null){
+            val currentUser = auth.currentUser
+            var userName = currentUser?.email.toString().split("@")[0]
+            if(currentUser != null){
+                var dashboardIntent = Intent(this, MainActivity::class.java)
+                dashboardIntent.putExtra("email", currentUser.email.toString())
+                dashboardIntent.putExtra("name", userName)
+                startActivity(dashboardIntent)
+                finish()
+
+            }
+        }
     }
 
     private fun loginUser(email: String, password: String) {
