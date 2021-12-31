@@ -1,7 +1,9 @@
 package com.bjtmtech.servicejobtracker
 
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -15,7 +17,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var binding : ActivityRegisterBinding
     private lateinit var database : DatabaseReference
     private lateinit var auth : FirebaseAuth
-
+    lateinit var shared : SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,12 +97,16 @@ class RegisterActivity : AppCompatActivity() {
                                             Toast.LENGTH_SHORT
                                         ).show()
 
-                                        var userName = email.split(".")[0]
-//                                        var dashboardIntent = Intent(this, DashboardActivity::class.java)
-//                                        dashboardIntent.putExtra("name", userName)
-//                                        dashboardIntent.putExtra("email", email)
-//                                        startActivity(dashboardIntent)
-//                                        finish()
+                                        var userName = email.split("@")[0]
+                                        var dashboardIntent = Intent(this, MainActivity::class.java)
+                                        shared = getSharedPreferences("myProfile" , Context.MODE_PRIVATE)
+                                        val edit = shared.edit()
+                                        edit.putString("email" , email)
+                                        edit.putString("name", userName)
+                                        edit.apply()
+
+                                        startActivity(dashboardIntent)
+                                        finish()
 
                                     }else{
                                         Toast.makeText(

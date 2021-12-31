@@ -8,7 +8,18 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="underline">#BD8888</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorPrimary">#3F5185</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPurple">#4A47A7</color>
+
+<!--  Bootstrap 4 colors  -->
+
+    <color name="btnPrimary">#0275d8</color>
+    <color name="btnSuccess">#5cb85c</color>
+    <color name="btnInfo">#5bc0de</color>
+    <color name="btnWarning">#f0ad4e</color>
+    <color name="btnDanger">#d9534f</color>
+    <color name="btnInverse">#292b2c</color>
+    <color name="btnFaded">#f7f7f7</color>
 </resources>

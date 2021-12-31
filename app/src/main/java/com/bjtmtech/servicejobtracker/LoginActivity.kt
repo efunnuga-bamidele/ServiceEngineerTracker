@@ -1,5 +1,6 @@
 package com.bjtmtech.servicejobtracker
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,12 +17,17 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import android.content.SharedPreferences
+
+
+
 
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
+    lateinit var shared : SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,8 +76,12 @@ class LoginActivity : AppCompatActivity() {
             var userName = currentUser?.email.toString().split("@")[0]
             if(currentUser != null){
                 var dashboardIntent = Intent(this, MainActivity::class.java)
-                dashboardIntent.putExtra("email", currentUser.email.toString())
-                dashboardIntent.putExtra("name", userName)
+                shared = getSharedPreferences("myProfile" , Context.MODE_PRIVATE)
+                val edit = shared.edit()
+                edit.putString("email" , currentUser.email.toString())
+                edit.putString("name", userName)
+                edit.apply()
+
                 startActivity(dashboardIntent)
                 finish()
 
@@ -92,8 +102,12 @@ class LoginActivity : AppCompatActivity() {
 
                     var userName = email.split("@")[0]
                     var dashboardIntent = Intent(this, MainActivity::class.java)
-                    dashboardIntent.putExtra("name", userName)
-                    dashboardIntent.putExtra("email", email)
+                    shared = getSharedPreferences("myProfile" , Context.MODE_PRIVATE)
+                    val edit = shared.edit()
+                    edit.putString("email" , email)
+                    edit.putString("name", userName)
+                    edit.apply()
+
                     startActivity(dashboardIntent)
                     finish()
 

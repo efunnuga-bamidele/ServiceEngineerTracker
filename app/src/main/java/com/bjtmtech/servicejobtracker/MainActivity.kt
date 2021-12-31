@@ -1,5 +1,9 @@
 package com.bjtmtech.servicejobtracker
 
+import android.app.DatePickerDialog
+import android.app.Dialog
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,6 +19,12 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.nav_header.*
+import android.content.SharedPreferences
+import android.util.Log
+import android.widget.DatePicker
+import androidx.fragment.app.DialogFragment
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,18 +34,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var firebaseUser: FirebaseUser
     lateinit var message1:String
     lateinit var message2:String
+    lateinit var shared : SharedPreferences
 
         override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-//            onResume()
-
-
-//
-//        val messageTextView1: TextView = findViewById(R.id.user_name)
-//        messageTextView1.text = message1
-//
 //        val messageTextView2: TextView = findViewById(R.id.user_email)
 //        messageTextView2.text = message2
 //
@@ -51,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        replaceFragment(dashboardFragment(), "Home")
+        replaceFragment(dashboardFragment(), "Dashboard")
         navView.setCheckedItem(R.id.nav_dashboard)
 
         navView.setNavigationItemSelectedListener {
@@ -76,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-    }
+        }
 
     private var back_press: Long = 0
 
@@ -113,25 +116,10 @@ class MainActivity : AppCompatActivity() {
     }
     private fun getExtras(){
 
-        //Extract th
-        val intent = intent
-        if (intent.hasExtra("name")) {
-            intent.extras!!.getBoolean("name")
-            val messageTextView1: TextView = findViewById(R.id.user_name)
-            messageTextView1.text = intent.getStringExtra("name").toString()
-            // TODO: Do something with the value of isNew.
-            Toast.makeText(applicationContext, intent.getStringExtra("name").toString(), Toast.LENGTH_SHORT).show()
-        }
-
-
-//        message1 = intent.getStringExtra("name").toString()
-//        message2 = intent.getStringExtra("email").toString()
-//        val messageTextView1: TextView = findViewById(R.id.user_name)
-//        messageTextView1.text = message1
-//        val messageTextView2: TextView = findViewById(R.id.user_email)
-//        messageTextView2.text = message2
-//        Toast.makeText(applicationContext, message1 +" : "+message2, Toast.LENGTH_SHORT).show()
-
+        //Extract user details
+        shared = getSharedPreferences("myProfile" , Context.MODE_PRIVATE)
+        user_email.text = shared.getString("email" , "defaultemail@mail.com" ).toString()
+        user_name.text = shared.getString("name" , "defultuser" ).toString()
     }
 
     private fun signout(){
@@ -139,17 +127,12 @@ class MainActivity : AppCompatActivity() {
         var loginPage = Intent(this, LoginActivity::class.java)
         startActivity(loginPage)
         finish()
+        val edit = shared.edit()
+        edit.clear()
     }
 
-    public override fun onResume() {
-        super.onResume()
-//        message1 = intent.getStringExtra("name").toString()
-//        message2 = intent.getStringExtra("email").toString()
-//        val messageTextView1: TextView = findViewById(R.id.user_name)
-//        messageTextView1.text = message1
-//        val messageTextView2: TextView = findViewById(R.id.user_email)
-//        messageTextView2.text = message2
-//        Toast.makeText(applicationContext, message1 +" : "+message2, Toast.LENGTH_SHORT).show()
-    }
+
 
 }
+
+
