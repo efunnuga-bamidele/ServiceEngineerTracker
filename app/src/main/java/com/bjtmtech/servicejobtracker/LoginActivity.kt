@@ -1,38 +1,35 @@
 package com.bjtmtech.servicejobtracker
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
-import android.widget.Button
-import android.widget.EditText
-
 import android.widget.TextView
 import android.widget.Toast
-import com.bjtmtech.servicejobtracker.databinding.ActivityLoginBinding
-import com.bjtmtech.servicejobtracker.databinding.ActivityRegisterBinding
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import android.content.SharedPreferences
-
-
-
+import android.util.Log
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_login.*
 
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityLoginBinding
     private lateinit var auth: FirebaseAuth
     lateinit var shared : SharedPreferences
+    val db = Firebase.firestore
+    var queryFirstName: String ?= null
+    var queryLastName: String ?= null
+    var queryEmail: String ?= null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+//        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(R.layout.activity_login)
         auth = FirebaseAuth.getInstance()
 
         onStart() //check if user session is still logged in and go to dashboard
@@ -42,14 +39,14 @@ class LoginActivity : AppCompatActivity() {
         registerButton.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
-            finish()
+//            finish()
         }
 
-        binding.loginBtn.setOnClickListener {
+        loginBtn.setOnClickListener {
 
-            val loginEmail = binding.loginEmailText.text.toString().trim()
+            val loginEmail = loginEmailText.text.toString().trim()
 
-            val loginPassword = binding.loginTextPassword.text.toString().trim()
+            val loginPassword = loginTextPassword.text.toString().trim()
 
             if (!TextUtils.isEmpty(loginEmail) && !TextUtils.isEmpty(loginPassword)) {
                 loginUser(loginEmail, loginPassword)
@@ -99,6 +96,7 @@ class LoginActivity : AppCompatActivity() {
                         "User Logged in Successfully",
                         Toast.LENGTH_SHORT
                     ).show()
+                    queryEmail = email.toString()
 
                     var userName = email.split("@")[0]
                     var dashboardIntent = Intent(this, MainActivity::class.java)
@@ -122,5 +120,6 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
     }
+
 }
 

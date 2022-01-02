@@ -11,23 +11,32 @@
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/drawable/bg_red.xml" value="0.206640625" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/drawable/bg_sky.xml" value="0.206640625" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/drawable/bg_yellow.xml" value="0.206640625" />
+        <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/drawable/btn_edges.xml" value="0.206640625" />
+        <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/drawable/divider.xml" value="0.206640625" />
+        <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/drawable/edit_btn.xml" value="0.206640625" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/drawable/ic_baseline_dashboard_24.xml" value="0.206640625" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/activity_login.xml" value="0.2453125" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/activity_register.xml" value="0.259375" />
+        <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/customer_name_dropdown_items.xml" value="0.19453125" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/fragment_active_job.xml" value="0.2" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/fragment_create_job.xml" value="0.2" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/fragment_customers.xml" value="0.259375" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/fragment_dashboard.xml" value="0.23055555555555557" />
-        <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/fragment_job_history.xml" value="0.259375" />
-        <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/fragment_jobtype.xml" value="0.259375" />
+        <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/fragment_job_history.xml" value="0.2" />
+        <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/fragment_jobtype.xml" value="0.2" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/fragment_language.xml" value="0.259375" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/fragment_managedb.xml" value="0.259375" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/fragment_manageusers.xml" value="0.259375" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/fragment_occupancy.xml" value="0.259375" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/fragment_profile.xml" value="0.259375" />
+        <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/jobHistory_item.xml" value="0.19453125" />
+        <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/jobtype_item.xml" value="0.19453125" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/nav_header.xml" value="0.259375" />
+        <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/recycler_view_item.xml" value="0.19453125" />
+        <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/layout/recycler_view_item_history.xml" value="0.19453125" />
         <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/menu/nav_menu.xml" value="0.4" />
+        <entry key="..\:/Users/EBamidele/AndroidStudioProjects/ServiceJobTracker/app/src/main/res/mipmap-anydpi-v26/app_icon.xml" value="0.206640625" />
       </map>
     </option>
   </component>
@@ -36,5 +45,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.259375" />
+      </ProjectState>
+    </option>
   </component>
 </project>

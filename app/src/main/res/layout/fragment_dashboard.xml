@@ -75,6 +75,10 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_green"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:id="@+id/customerVisitLayout"
+                    android:foreground="?selectableItemBackground"
                     android:orientation="vertical">
 
                     <ImageView
@@ -89,7 +93,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="4dp"
-                        android:text="Customer Visited"
+                        android:text="Customer Visit"
                         android:textColor="#FFF"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -97,6 +101,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/dbCustomerVisited"
                         android:gravity="center"
                         android:padding="4dp"
                         android:text="0"
@@ -119,6 +124,10 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_red"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:id="@+id/workDaysLayout"
+                    android:foreground="?selectableItemBackground"
                     android:orientation="vertical">
 
                     <ImageView
@@ -143,6 +152,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="4dp"
+                        android:id="@+id/dbWorkedDays"
                         android:text="0"
                         android:textColor="#FFF"
                         android:textSize="50sp" />
@@ -163,6 +173,10 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_yellow"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?selectableItemBackground"
+                    android:id="@+id/activeJobLayout"
                     android:orientation="vertical">
 
                     <ImageView
@@ -177,7 +191,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="4dp"
-                        android:text="Currently Active Jobs"
+                        android:text="Active \nJobs"
                         android:textColor="#FFF"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -185,6 +199,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/dbActiveCounter"
                         android:gravity="center"
                         android:padding="4dp"
                         android:text="0"
@@ -216,6 +231,10 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_sky"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:id="@+id/completedJobsLayout"
+                    android:foreground="?selectableItemBackground"
                     android:orientation="vertical">
 
                     <ImageView
@@ -240,6 +259,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="4dp"
+                        android:id="@+id/dbCompletedCounter"
                         android:text="0"
                         android:textColor="#FFF"
                         android:textSize="50sp" />
@@ -260,6 +280,10 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_purple"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:id="@+id/pendingJobsLayout"
+                    android:foreground="?selectableItemBackground"
                     android:orientation="vertical">
 
                     <ImageView
@@ -285,6 +309,7 @@
                         android:gravity="center"
                         android:padding="4dp"
                         android:text="0"
+                        android:id="@+id/dbPendingCounter"
                         android:textColor="#FFF"
                         android:textSize="50sp" />
 
@@ -304,6 +329,10 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_navy"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:id="@+id/canceledJobsLayout"
+                    android:foreground="?selectableItemBackground"
                     android:orientation="vertical">
 
                     <ImageView
@@ -329,6 +358,7 @@
                         android:gravity="center"
                         android:padding="4dp"
                         android:text="0"
+                        android:id="@+id/dbCanceledCounter"
                         android:textColor="#FFF"
                         android:textSize="50sp" />
 

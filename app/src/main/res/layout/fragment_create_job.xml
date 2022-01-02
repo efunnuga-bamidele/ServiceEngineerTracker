@@ -14,21 +14,23 @@
 
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/cjUpdateData"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
-            android:text="Cancle"
-            android:textSize="20sp"
-            app:backgroundTint="@color/btnWarning"
+            android:text="Update Data"
+            android:textSize="14sp"
+            android:visibility="invisible"
+            app:backgroundTint="@color/btnPrimary"
+            app:cornerRadius="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintEnd_toStartOf="@+id/cjDeleteData"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cjDeleteData" />
+            app:layout_constraintTop_toBottomOf="@+id/cjSaveData"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/textLogo2"
@@ -47,6 +49,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:id="@+id/textInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -57,17 +60,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textLogo2">
 
-            <EditText
-                android:id="@+id/cjCustomerNameEdt"
+            <AutoCompleteTextView
+                android:id="@+id/cjCustomerName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Customer Name"
-                android:onClick="setupDatePicker"
+                android:layout_height="match_parent"
+                android:hint="Select or Enter Customer Name"
                 tools:ignore="SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout2"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:id="@+id/textInputLayoutCJ"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -77,11 +80,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/cjCustomerCountry"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Customer Country"
+                android:layout_height="match_parent"
+                android:hint="Select or Enter Customer Country"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/textInputLayoutstate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCJ">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/cjCustomerState"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Customer State"
                 tools:ignore="SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,10 +118,10 @@
             android:layout_marginBottom="8dp"
             android:backgroundTint="@color/btnInverse"
             android:text="Start Date"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayout5"
+            app:layout_constraintBottom_toTopOf="@+id/cjTextInputLayout"
             app:layout_constraintEnd_toStartOf="@+id/cjBtnStopDate"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutstate" />
 
         <Button
             android:id="@+id/cjBtnStopDate"
@@ -108,16 +131,18 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:backgroundTint="@color/btnInverse"
+            android:backgroundTint="@color/btnFaded"
+            android:enabled="false"
             android:text="Stop Date"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayout5"
+            app:layout_constraintBottom_toTopOf="@+id/cjTextInputLayout"
             app:layout_constraintEnd_toStartOf="@+id/cjDateRangeText"
             app:layout_constraintStart_toEndOf="@+id/cjBtnStartDate"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutstate" />
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout5"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:id="@+id/cjTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -127,11 +152,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cjBtnStartDate">
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/cjJobType"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Type Of Job"
+                android:layout_height="match_parent"
+                android:hint="Select or Enter Type Of Job"
                 tools:ignore="SpeakableTextPresentCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -149,10 +174,10 @@
             android:textColor="@color/white"
             android:textSize="30sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayout5"
+            app:layout_constraintBottom_toTopOf="@+id/cjTextInputLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cjBtnStopDate"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutstate"
             tools:ignore="MissingConstraints" />
 
         <View
@@ -165,57 +190,56 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout5" />
+            app:layout_constraintTop_toBottomOf="@+id/cjTextInputLayout" />
 
         <Button
             android:id="@+id/cjSaveData"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
             android:text="Save Data"
-            android:textSize="20sp"
+            android:textSize="14sp"
             app:backgroundTint="@color/btnSuccess"
-            app:layout_constraintBottom_toTopOf="@+id/cjUpdateData"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:cornerRadius="4dp"
+            app:layout_constraintEnd_toStartOf="@+id/cjClearData"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider" />
 
         <Button
-            android:id="@+id/cjUpdateData"
+            android:id="@+id/cjClearData"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="Update Data"
-            android:textSize="20sp"
-            app:backgroundTint="@color/btnPrimary"
-            app:layout_constraintBottom_toTopOf="@+id/cjDeleteData"
+            android:text="Clear Data"
+            android:textSize="14sp"
+            app:backgroundTint="@color/btnWarning"
+            app:cornerRadius="4dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cjSaveData" />
+            app:layout_constraintStart_toEndOf="@+id/cjSaveData"
+            app:layout_constraintTop_toTopOf="@+id/divider" />
 
         <Button
             android:id="@+id/cjDeleteData"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:text="Delete Data"
-            android:textSize="20sp"
+            android:textSize="14sp"
+            android:visibility="invisible"
             app:backgroundTint="@color/btnDanger"
-            app:layout_constraintBottom_toTopOf="@+id/button6"
+            app:cornerRadius="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cjUpdateData" />
+            app:layout_constraintStart_toEndOf="@+id/cjUpdateData"
+            app:layout_constraintTop_toBottomOf="@+id/cjClearData"
+            app:layout_constraintVertical_bias="0.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

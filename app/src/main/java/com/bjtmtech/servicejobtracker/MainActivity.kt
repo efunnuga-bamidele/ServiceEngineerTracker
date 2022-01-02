@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
 
         drawerLayout = findViewById(R.id.drawerLayout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
+        var navView: NavigationView = findViewById(R.id.nav_view)
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toggle)
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //    used to replace fragment
-    private fun replaceFragment(fragment: Fragment, title: String) {
+    public fun replaceFragment(fragment: Fragment, title: String) {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.framelayout, fragment)
