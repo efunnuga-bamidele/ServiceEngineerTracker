@@ -11,6 +11,9 @@ import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bjtmtech.servicejobtracker.adapter.MyAdapterJobType
+import com.bjtmtech.servicejobtracker.data.JobTypes
+import com.bjtmtech.servicejobtracker.ui.MainActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
@@ -101,7 +104,7 @@ class jobtypeFragment : Fragment() {
                 .addOnSuccessListener { result ->
                     dataSize = result.size()
 
-                   // Get te datas from the text input
+                    // Get te datas from the text input
                     val jobType = jtJobType.text.toString().trim()
                     val jtID = dataSize + 1
 
@@ -134,7 +137,7 @@ class jobtypeFragment : Fragment() {
 
         jtUpdateButton.setOnClickListener {
 
-           db.collection("jobTypes").document(EditUID.toString())
+            db.collection("jobTypes").document(EditUID.toString())
                 .update("name", jtJobType.text.toString())
                 .addOnSuccessListener {
                     Toast.makeText(context,"Job type successfully updated!", Toast.LENGTH_SHORT).show()
@@ -144,7 +147,7 @@ class jobtypeFragment : Fragment() {
 
                 }
                 .addOnFailureListener {  Toast.makeText(context,"Error updating job type!", Toast.LENGTH_SHORT).show()}
-          
+
         }
 
         jtDeleteButton.setOnClickListener {
@@ -175,26 +178,26 @@ class jobtypeFragment : Fragment() {
 
     private fun EventChangeListener() {
         db.collection("jobTypes").
-                addSnapshotListener(object : EventListener<QuerySnapshot>{
-                    override fun onEvent(
-                        value: QuerySnapshot?,
-                        error: FirebaseFirestoreException?
-                    ) {
-                       if (error != null){
-                           Log.e("Firestore", error.message.toString())
-                           return
-                       }
+        addSnapshotListener(object : EventListener<QuerySnapshot>{
+            override fun onEvent(
+                value: QuerySnapshot?,
+                error: FirebaseFirestoreException?
+            ) {
+                if (error != null){
+                    Log.e("Firestore", error.message.toString())
+                    return
+                }
 
-                        for(dc : DocumentChange in value?.documentChanges!!){
-                            if(dc.type == DocumentChange.Type.ADDED){
-                                jobsArrayList.add(dc.document.toObject(JobTypes::class.java))
-                            }
-                        }
-
-                        myAdapter.notifyDataSetChanged()
+                for(dc : DocumentChange in value?.documentChanges!!){
+                    if(dc.type == DocumentChange.Type.ADDED){
+                        jobsArrayList.add(dc.document.toObject(JobTypes::class.java))
                     }
+                }
 
-                })
+                myAdapter.notifyDataSetChanged()
+            }
+
+        })
     }
 
     private fun setup() {

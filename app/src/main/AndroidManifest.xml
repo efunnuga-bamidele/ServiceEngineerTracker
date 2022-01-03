@@ -13,19 +13,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ServiceJobTracker">
         <activity
-            android:name=".RegisterActivity"
+            android:name=".ui.RegisterActivity"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
 
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"
             android:exported="false" />
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.LoginActivity"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"
             android:exported="true">

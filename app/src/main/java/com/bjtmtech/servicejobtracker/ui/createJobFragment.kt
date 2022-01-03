@@ -1,4 +1,4 @@
-package com.bjtmtech.servicejobtracker
+package com.bjtmtech.servicejobtracker.ui
 
 
 
@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.bjtmtech.servicejobtracker.R
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.type.Date

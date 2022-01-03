@@ -1,6 +1,5 @@
-package com.bjtmtech.servicejobtracker
+package com.bjtmtech.servicejobtracker.ui
 
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import android.content.SharedPreferences
-import android.util.Log
+import com.bjtmtech.servicejobtracker.R
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*

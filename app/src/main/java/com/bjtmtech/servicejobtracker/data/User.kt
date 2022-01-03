@@ -1,4 +1,4 @@
-package com.bjtmtech.servicejobtracker
+package com.bjtmtech.servicejobtracker.data
 
 data class User(val firstName : String? = null, val lastName : String? = null,
                 val country : String? = null, val jobTitle : String? = null,

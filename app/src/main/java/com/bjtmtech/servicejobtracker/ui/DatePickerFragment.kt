@@ -1,4 +1,4 @@
-package com.bjtmtech.servicejobtracker
+package com.bjtmtech.servicejobtracker.ui
 
 import android.app.DatePickerDialog
 import android.app.Dialog

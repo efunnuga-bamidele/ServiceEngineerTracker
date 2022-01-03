@@ -1,22 +1,19 @@
-package com.bjtmtech.servicejobtracker
+package com.bjtmtech.servicejobtracker.ui
 
 
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.bjtmtech.servicejobtracker.R
+import com.bjtmtech.servicejobtracker.data.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_register.*
-import kotlinx.android.synthetic.main.fragment_create_job.*
 import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
@@ -48,7 +45,8 @@ class RegisterActivity : AppCompatActivity() {
             countryNamesList.add(s)
         }
 
-        val arrayAdapterCountry = ArrayAdapter(this, R.layout.customer_name_dropdown_items, countryNamesList)
+        val arrayAdapterCountry = ArrayAdapter(this,
+            R.layout.customer_name_dropdown_items, countryNamesList)
         countryEditText.setAdapter(arrayAdapterCountry)
 
 
@@ -76,7 +74,9 @@ class RegisterActivity : AppCompatActivity() {
 
                     val User = User(firstName, lastName, country, jobTitle, email)
 
-                    auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegisterActivity()) {
+                    auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(
+                        RegisterActivity()
+                    ) {
                             task ->
                         if(task.isSuccessful) {
                             Toast.makeText(

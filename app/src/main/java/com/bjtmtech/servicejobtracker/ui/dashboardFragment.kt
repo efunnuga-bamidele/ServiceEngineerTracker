@@ -1,4 +1,4 @@
-package com.bjtmtech.servicejobtracker
+package com.bjtmtech.servicejobtracker.ui
 
 import android.content.ContentValues
 import android.content.ContentValues.TAG
@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import android.content.SharedPreferences
+import com.bjtmtech.servicejobtracker.R
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_dashboard.*

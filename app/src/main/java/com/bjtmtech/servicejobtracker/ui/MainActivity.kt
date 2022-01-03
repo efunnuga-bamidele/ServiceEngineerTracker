@@ -1,14 +1,10 @@
-package com.bjtmtech.servicejobtracker
+package com.bjtmtech.servicejobtracker.ui
 
-import android.app.DatePickerDialog
-import android.app.Dialog
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
@@ -20,9 +16,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.nav_header.*
 import android.content.SharedPreferences
-import android.util.Log
-import android.widget.DatePicker
-import androidx.fragment.app.DialogFragment
+import com.bjtmtech.servicejobtracker.R
+import com.bjtmtech.servicejobtracker.jobtypeFragment
 import java.util.*
 
 

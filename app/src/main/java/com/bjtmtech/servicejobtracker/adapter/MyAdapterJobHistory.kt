@@ -1,4 +1,4 @@
-package com.bjtmtech.servicejobtracker
+package com.bjtmtech.servicejobtracker.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bjtmtech.servicejobtracker.data.JobTypes
+import com.bjtmtech.servicejobtracker.R
 
 data class MyAdapterJobHistory(private val jobHistoryList : ArrayList<JobTypes>) : RecyclerView.Adapter<MyAdapterJobHistory.MyJobsViewHolder>(){
 
@@ -29,8 +31,9 @@ data class MyAdapterJobHistory(private val jobHistoryList : ArrayList<JobTypes>)
         holder.myButton
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyAdapterJobHistory.MyJobsViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.jobtype_item,
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyJobsViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(
+            R.layout.jobtype_item,
             parent, false)
 
         return MyJobsViewHolder(itemView, mListener)

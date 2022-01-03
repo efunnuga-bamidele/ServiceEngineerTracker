@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'com.google.gms.google-services'
     id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -40,6 +41,26 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 dependencies {
+
+//    def lifecycle_version = "2.3.0"
+    def nav_version = "2.3.4"
+    def recyclerview_version = "1.1.0"
+    def material_version = "1.4.0-alpha01"
+
+    // ViewModel
+//    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
+    // LiveData
+//    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    // recyclerview
+    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+
+    // material
+    implementation "com.google.android.material:material:$material_version"
 
     //Add the library in app gradle
     implementation 'com.android.support:multidex:1.0.3'

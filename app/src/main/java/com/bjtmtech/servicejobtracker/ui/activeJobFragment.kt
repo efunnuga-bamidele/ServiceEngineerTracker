@@ -1,4 +1,4 @@
-package com.bjtmtech.servicejobtracker
+package com.bjtmtech.servicejobtracker.ui
 
 import android.app.DatePickerDialog
 import android.content.ContentValues.TAG
@@ -16,6 +16,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
+import com.bjtmtech.servicejobtracker.R
+import com.bjtmtech.servicejobtracker.ui.MainActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
