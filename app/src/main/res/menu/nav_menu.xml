@@ -37,10 +37,11 @@
                     android:title="@string/jobtype"
                     android:icon="@drawable/ic_baseline_table_view_24"
                     />
+                />
                 <item
-                    android:id="@+id/nav_language"
-                    android:title="@string/language"
-                    android:icon="@drawable/ic_baseline_language_24"
+                    android:id="@+id/nav_customers"
+                    android:title="@string/customers"
+                    android:icon="@drawable/ic_baseline_supervised_user_circle_24"
                     />
             </group>
         </menu>
@@ -49,17 +50,13 @@
 
     <item android:title="Administrator Settings">
         <menu>
-            <group android:checkableBehavior="single">
+            <group android:checkableBehavior="single"
+                >
                 <item
                     android:id="@+id/nav_manageusers"
                     android:title="@string/manageusers"
-                    android:icon="@drawable/ic_baseline_people_alt_24"
-                    />
-                <item
-                    android:id="@+id/nav_customers"
-                    android:title="@string/customers"
-                    android:icon="@drawable/ic_baseline_supervised_user_circle_24"
-                    />
+                    android:icon="@drawable/ic_baseline_people_alt_24"/>
+
                 <item
                     android:id="@+id/nav_occupancy"
                     android:title="@string/occupancy"

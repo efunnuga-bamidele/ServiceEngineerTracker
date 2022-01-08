@@ -25,6 +25,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_customer_visit">Total Customer Visited</string>
 
+    <string name="addedHistory">History has been added successfully!</string>
+    <string name="error">%1$s</string>
+<!--    <string name="error">History has been added successfully!</string>-->
+
     <string-array name="customers">
         <item>Nigerite</item>
         <item>Nestle</item>

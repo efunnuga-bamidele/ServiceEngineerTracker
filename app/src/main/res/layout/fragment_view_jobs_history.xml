@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".ui.activeJobFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".ui.ViewJobsHistoryFragment">
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -13,26 +15,23 @@
 
 
         <Button
-            android:id="@+id/ajCancelUpdate"
+            android:id="@+id/vjhDeleteJob"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            android:text="Cancel Update"
+            android:text="Delete Job"
             android:textSize="14sp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:backgroundTint="@color/btnWarning"
             app:cornerRadius="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ajUpdateJob"
-            app:layout_constraintTop_toBottomOf="@+id/ajCancelJob"
-            app:layout_constraintVertical_bias="0.078" />
+            app:layout_constraintStart_toEndOf="@+id/vjhUpdateJob"
+            app:layout_constraintTop_toBottomOf="@+id/vjhCancelJob" />
 
         <Button
-            android:id="@+id/ajPendJob"
+            android:id="@+id/vjhPendJob"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
@@ -42,51 +41,28 @@
             android:textSize="14sp"
             app:backgroundTint="@color/colorPurple"
             app:cornerRadius="4dp"
-            app:layout_constraintEnd_toStartOf="@+id/ajCancelJob"
+            app:layout_constraintEnd_toStartOf="@+id/vjhCancelJob"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ajCompleteJob" />
+            app:layout_constraintTop_toBottomOf="@+id/vjhCompleteJob" />
 
         <TextView
-            android:id="@+id/textLogoActive"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/vjhtextLogoActive"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="8dp"
             android:gravity="center"
-            android:text="View Your Active Job"
+            android:text="View Job History Details"
             android:textColor="@color/purple_700"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/closeBtnImage"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutCNVJH"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:id="@+id/textInputLayoutCNAJ"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textLogoActive">
-
-            <AutoCompleteTextView
-                android:id="@+id/ajCustomerName"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Select or Enter Customer Name"
-                android:enabled="false"
-                android:textColor="@color/black"
-                tools:ignore="SpeakableTextPresentCheck" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:id="@+id/textInputLayoutCCAJ"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -94,10 +70,32 @@
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCNAJ">
+            app:layout_constraintTop_toBottomOf="@+id/vjhtextLogoActive">
 
             <AutoCompleteTextView
-                android:id="@+id/ajCustomerCountry"
+                android:id="@+id/vjhCustomerName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:enabled="false"
+                android:hint="Select or Enter Customer Name"
+                android:textColor="@color/black"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:id="@+id/textInputLayoutCCVJH"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCNVJH">
+
+            <AutoCompleteTextView
+                android:id="@+id/vjhCustomerCountry"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Select or Enter Customer Country"
@@ -108,7 +106,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:id="@+id/textInputLayoutstateCSAJ"
+            android:id="@+id/textInputLayoutstateCSVJH"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -116,10 +114,10 @@
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCCAJ">
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutCCVJH">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ajCustomerState"
+                android:id="@+id/vjhCustomerState"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Customer State"
@@ -129,7 +127,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/ajBtnStartDate"
+            android:id="@+id/vjhBtnStartDate"
             android:layout_width="0dp"
             android:layout_height="57dp"
             android:layout_marginStart="8dp"
@@ -140,13 +138,13 @@
             android:text="Start Date"
             android:enabled="false"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/ajTextInputLayout"
-            app:layout_constraintEnd_toStartOf="@+id/ajBtnStopDate"
+            app:layout_constraintBottom_toTopOf="@+id/vjhTextInputLayout"
+            app:layout_constraintEnd_toStartOf="@+id/vjhBtnStopDate"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutstateCSAJ" />
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutstateCSVJH" />
 
         <Button
-            android:id="@+id/ajBtnStopDate"
+            android:id="@+id/vjhBtnStopDate"
             android:layout_width="0dp"
             android:layout_height="57dp"
             android:layout_marginStart="8dp"
@@ -157,15 +155,15 @@
             android:textColor="@color/white"
             android:enabled="false"
             android:text="Stop Date"
-            app:layout_constraintBottom_toTopOf="@+id/ajTextInputLayout"
-            app:layout_constraintEnd_toStartOf="@+id/ajDateRangeText"
-            app:layout_constraintStart_toEndOf="@+id/ajBtnStartDate"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutstateCSAJ" />
+            app:layout_constraintBottom_toTopOf="@+id/vjhTextInputLayout"
+            app:layout_constraintEnd_toStartOf="@+id/vjhDateRangeText"
+            app:layout_constraintStart_toEndOf="@+id/vjhBtnStartDate"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutstateCSVJH" />
 
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:id="@+id/ajTextInputLayout"
+            android:id="@+id/vjhTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -173,10 +171,10 @@
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ajBtnStartDate">
+            app:layout_constraintTop_toBottomOf="@+id/vjhBtnStartDate">
 
             <AutoCompleteTextView
-                android:id="@+id/ajJobType"
+                android:id="@+id/vjhJobType"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="Select or Enter Type Of Job"
@@ -186,7 +184,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/ajDateRangeText"
+            android:id="@+id/vjhDateRangeText"
             android:layout_width="60dp"
             android:layout_height="57dp"
             android:layout_marginStart="8dp"
@@ -199,10 +197,10 @@
             android:textColor="@color/white"
             android:textSize="30sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/ajTextInputLayout"
+            app:layout_constraintBottom_toTopOf="@+id/vjhTextInputLayout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ajBtnStopDate"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutstateCSAJ"
+            app:layout_constraintStart_toEndOf="@+id/vjhBtnStopDate"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutstateCSVJH"
             tools:ignore="MissingConstraints" />
 
         <View
@@ -215,10 +213,10 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ajTextInputLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/vjhTextInputLayout" />
 
         <Button
-            android:id="@+id/ajCompleteJob"
+            android:id="@+id/vjhCompleteJob"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -228,27 +226,27 @@
             android:textSize="14sp"
             app:backgroundTint="@color/colorPurple"
             app:cornerRadius="4dp"
-            app:layout_constraintEnd_toStartOf="@+id/ajEditJob"
+            app:layout_constraintEnd_toStartOf="@+id/vjhOpenJob"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider" />
 
         <Button
-            android:id="@+id/ajEditJob"
+            android:id="@+id/vjhOpenJob"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:text="Edit Job"
+            android:text="Open Job"
             android:textSize="14sp"
             app:backgroundTint="@color/colorPurple"
             app:cornerRadius="4dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ajCompleteJob"
+            app:layout_constraintStart_toEndOf="@+id/vjhCompleteJob"
             app:layout_constraintTop_toTopOf="@+id/divider" />
 
         <Button
-            android:id="@+id/ajCancelJob"
+            android:id="@+id/vjhCancelJob"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
@@ -259,28 +257,107 @@
             app:backgroundTint="@color/colorPurple"
             app:cornerRadius="4dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ajPendJob"
-            app:layout_constraintTop_toBottomOf="@+id/ajEditJob" />
+            app:layout_constraintStart_toEndOf="@+id/vjhPendJob"
+            app:layout_constraintTop_toBottomOf="@+id/vjhOpenJob" />
 
         <Button
-            android:id="@+id/ajUpdateJob"
+            android:id="@+id/vjhUpdateJob"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
             android:text="Update Job"
             android:textSize="14sp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:backgroundTint="@color/colorAccent"
             app:cornerRadius="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ajCancelUpdate"
+            app:layout_constraintEnd_toStartOf="@+id/vjhDeleteJob"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ajPendJob"
-            app:layout_constraintVertical_bias="0.07" />
+            app:layout_constraintTop_toBottomOf="@+id/vjhPendJob" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:id="@+id/vjhtextInputLayout2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/vjhtextInputLayout3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vjhUpdateJob">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/vjhJobStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:textColor="@color/black"
+                android:hint="Job Status" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:id="@+id/vjhtextInputLayout3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/vjhtextInputLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/vjhDeleteJob">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/vjhCreatedDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:textColor="@color/black"
+                android:hint="Created Date" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vjhtextInputLayout2">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/vjhEngineerName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:textColor="@color/black"
+                android:hint="Engineer's Name" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/closeBtnImage"
+            android:layout_width="26dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:src="@drawable/ic_close_24"
+            app:layout_constraintBottom_toTopOf="@+id/textInputLayoutCNVJH"
+            app:layout_constraintEnd_toStartOf="@+id/vjhtextLogoActive"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</FrameLayout>
+</LinearLayout>

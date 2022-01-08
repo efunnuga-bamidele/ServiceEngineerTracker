@@ -55,6 +55,7 @@ dependencies {
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
 
     // recyclerview
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
@@ -65,6 +66,9 @@ dependencies {
     //Add the library in app gradle
     implementation 'com.android.support:multidex:1.0.3'
 
+//FancyToast-Android
+//    implementation 'com.github.Shashank02051997:FancyToast-Android:0.1.6'
+    implementation 'io.github.shashank02051997:FancyToast:2.0.1'
 ////Add this to the default config in the app gradle
     implementation("androidx.constraintlayout:constraintlayout:2.1.2") //enable responsive view
     implementation 'androidx.core:core-ktx:1.3.2'

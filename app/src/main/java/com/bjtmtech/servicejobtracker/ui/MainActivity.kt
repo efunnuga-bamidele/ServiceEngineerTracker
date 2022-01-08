@@ -16,8 +16,11 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.nav_header.*
 import android.content.SharedPreferences
+import android.view.Menu
+import androidx.core.view.get
 import com.bjtmtech.servicejobtracker.R
 import com.bjtmtech.servicejobtracker.jobtypeFragment
+import com.google.firebase.firestore.ktx.firestore
 import java.util.*
 
 
@@ -27,9 +30,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var drawerLayout: DrawerLayout
     private lateinit var auth: FirebaseAuth
     lateinit var firebaseUser: FirebaseUser
-    lateinit var message1:String
+    lateinit var userDetail:String
     lateinit var message2:String
     lateinit var shared : SharedPreferences
+    lateinit var navView: NavigationView
+    var db = Firebase.firestore
 
         override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,19 +42,22 @@ class MainActivity : AppCompatActivity() {
 //        val messageTextView2: TextView = findViewById(R.id.user_email)
 //        messageTextView2.text = message2
 //
-
+            navView = findViewById(R.id.nav_view)
 
 
         drawerLayout = findViewById(R.id.drawerLayout)
-        var navView: NavigationView = findViewById(R.id.nav_view)
+
+
+
 
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
+        checkUserLevel()
         replaceFragment(dashboardFragment(), "Dashboard")
+//            replaceFragment(jobHistoryFragment(), "Dashboard")
         navView.setCheckedItem(R.id.nav_dashboard)
 
         navView.setNavigationItemSelectedListener {
@@ -62,7 +70,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_view_active_job -> replaceFragment(activeJobFragment(), it.title.toString())
                 R.id.nav_jobHistory -> replaceFragment(jobHistoryFragment(), it.title.toString())
                 R.id.nav_jobType -> replaceFragment(jobtypeFragment(), it.title.toString())
-                R.id.nav_language -> replaceFragment(languageFragment(), it.title.toString())
+//                R.id.nav_language -> replaceFragment(languageFragment(), it.title.toString())
                 R.id.nav_manageusers -> replaceFragment(manageusersFragment(), it.title.toString())
                 R.id.nav_customers -> replaceFragment(customersFragment(), it.title.toString())
                 R.id.nav_occupancy -> replaceFragment(occupancyFragment(), it.title.toString())
@@ -74,7 +82,37 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
         }
+    private fun checkUserLevel(){
+        shared = getSharedPreferences("myProfile" , Context.MODE_PRIVATE)
+        userDetail = shared.getString("email" , "defaultemail@mail.com" ).toString()
+
+        db.collection("users")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result)
+                    if(document.data["email"] == userDetail){
+//                        Toast.makeText(this, document.data["level"].toString(), Toast.LENGTH_SHORT).show()
+                        if (document.data["level"].toString() == "Admin"){
+                            navView.menu.findItem(R.id.nav_manageusers).isVisible = true
+                            navView.menu.findItem(R.id.nav_occupancy).isVisible = true
+                            navView.menu.findItem(R.id.nav_managedb).isVisible = true
+//                            navView.menu.findItem(R.id.nav_customers).isVisible = true
+                        }else{
+                            navView.menu.findItem(R.id.nav_manageusers).isVisible = false
+                            navView.menu.findItem(R.id.nav_occupancy).isVisible = false
+                            navView.menu.findItem(R.id.nav_managedb).isVisible = false
+//                            navView.menu.findItem(R.id.nav_customers).isVisible = false
+                        }
+                        break
+                    }
+            }
+
+
+
+    }
+
 
     private var back_press: Long = 0
 
@@ -105,16 +143,37 @@ class MainActivity : AppCompatActivity() {
 
         if (toggle.onOptionsItemSelected(item)) {
             getExtras()
+            checkUserLevel()
             return true
         }
+
+        val id = item.getItemId()
+
+        if (id == R.id.nav_language) {
+            replaceFragment(languageFragment(), "Language")
+//            to bring out action dialogbox
+//            navView.setCheckedItem(0)
+            return true
+        }
+//        if (id == R.id.action_two) {
+//            Toast.makeText(this, "Item Two Clicked", Toast.LENGTH_LONG).show()
+//            return true
+//        }
+//        if (id == R.id.action_three) {
+//            Toast.makeText(this, "Item Three Clicked", Toast.LENGTH_LONG).show()
+//            return true
+//        }
         return super.onOptionsItemSelected(item)
     }
+
     private fun getExtras(){
 
         //Extract user details
         shared = getSharedPreferences("myProfile" , Context.MODE_PRIVATE)
         user_email.text = shared.getString("email" , "defaultemail@mail.com" ).toString()
         user_name.text = shared.getString("name" , "defultuser" ).toString()
+        userDetail = shared.getString("email" , "defaultemail@mail.com" ).toString()
+
     }
 
     private fun signout(){
@@ -125,6 +184,13 @@ class MainActivity : AppCompatActivity() {
         val edit = shared.edit()
         edit.clear()
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        return super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.setting_menu, menu)
+        return true
+    }
+
 
 
 

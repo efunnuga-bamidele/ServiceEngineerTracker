@@ -92,7 +92,7 @@ class RegisterActivity : AppCompatActivity() {
                                 "country" to country,
                                 "jobTitle" to jobTitle,
                                 "email" to email,
-                                "level" to "default",
+                                "level" to "User",
                                 "language" to "english"
                             )
 

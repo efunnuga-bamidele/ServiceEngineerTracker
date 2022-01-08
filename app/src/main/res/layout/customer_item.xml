@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?selectableItemBackground"
-    android:id="@+id/jvhhCardView"
+    android:id="@+id/cnvCardView"
     app:cardCornerRadius="10dp"
     android:backgroundTint="@color/btnInfo">
 
@@ -25,14 +25,14 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:padding="10dp"
-            android:src="@drawable/img_7" />
+            android:src="@drawable/img_4" />
 
         <TextView
-            android:id="@+id/text_view_name"
+            android:id="@+id/text_view_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
-            android:text="Document Name"
+            android:text="ID"
             android:layout_toRightOf="@+id/imageView"
             android:layout_marginLeft="20dp"
             android:layout_margin="4dp"
@@ -41,15 +41,15 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/text_view_document"
+            android:id="@+id/text_view_customer_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text_view_name"
+            android:layout_below="@id/text_view_id"
             android:fontFamily="sans-serif-light"
             android:layout_toRightOf="@+id/imageView"
             android:layout_marginLeft="20dp"
             android:layout_margin="4dp"
-            android:text="Company Name [2010.02.11 - 2010.02.19"
+            android:text="Company Name"
             android:textColor="#000000"
             android:textSize="16sp" />
 

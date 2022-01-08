@@ -12,42 +12,26 @@ import android.content.SharedPreferences
 import com.bjtmtech.servicejobtracker.R
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.shashank.sony.fancytoastlib.FancyToast
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [dashboardFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class dashboardFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
     private var PRIVATE_MODE = 0
     val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sharedPref: SharedPreferences = context!!.getSharedPreferences("myProfile", PRIVATE_MODE)
+        val sharedPref: SharedPreferences = requireContext().getSharedPreferences("myProfile", PRIVATE_MODE)
         val engineerEmailQuery = sharedPref.getString("email" , "defaultemail@mail.com" ).toString()
 
         val sdf = SimpleDateFormat("MMMM dd, yyyy")
@@ -73,8 +57,10 @@ class dashboardFragment : Fragment() {
 //                Log.w(ContentValues.TAG, "Error getting documents: ", exception)
             }
         activeJobLayout.setOnClickListener {
-            Toast.makeText(context, "Total Active Jobs : ${dbActiveCounter.text.toString()} \n Job Year :  $currentYear" +
-                    "\n Current date : $currentDate", Toast.LENGTH_LONG).show()
+//            Toast.makeText(context, "Total Active Jobs : ${dbActiveCounter.text.toString()} \n Job Year :  $currentYear" +
+//                    "\n Current date : $currentDate", Toast.LENGTH_LONG).show()
+            FancyToast.makeText(context,"Total Active Jobs : ${dbActiveCounter.text.toString()} \n Job Year :  $currentYear" +
+                    "\n Current date : $currentDate",FancyToast.LENGTH_LONG,FancyToast.DEFAULT,true).show()
         }
 
         //        Completed Jobs
@@ -91,8 +77,10 @@ class dashboardFragment : Fragment() {
             }
 
         completedJobsLayout.setOnClickListener {
-            Toast.makeText(context, "Total Completed Jobs : ${dbCompletedCounter.text.toString()} \n Job Year :  $currentYear" +
-                    "\n Current date : $currentDate", Toast.LENGTH_LONG).show()
+//            Toast.makeText(context, "Total Completed Jobs : ${dbCompletedCounter.text.toString()} \n Job Year :  $currentYear" +
+//                    "\n Current date : $currentDate", Toast.LENGTH_LONG).show()
+            FancyToast.makeText(context,"Total Completed Jobs : ${dbCompletedCounter.text.toString()} \n Job Year :  $currentYear" +
+                    "\n Current date : $currentDate",FancyToast.LENGTH_LONG,FancyToast.DEFAULT,true).show()
         }
 
         //        Canceled Jobs
@@ -110,8 +98,10 @@ class dashboardFragment : Fragment() {
             }
 
         canceledJobsLayout.setOnClickListener {
-            Toast.makeText(context, "Total Canceled Jobs : ${dbCanceledCounter.text.toString()} \n Job Year :  $currentYear" +
-                    "\n Current date : $currentDate", Toast.LENGTH_LONG).show()
+//            Toast.makeText(context, "Total Canceled Jobs : ${dbCanceledCounter.text.toString()} \n Job Year :  $currentYear" +
+//                    "\n Current date : $currentDate", Toast.LENGTH_LONG).show()
+            FancyToast.makeText(context,"Total Canceled Jobs : ${dbCanceledCounter.text.toString()} \n Job Year :  $currentYear" +
+                    "\n Current date : $currentDate",FancyToast.LENGTH_LONG,FancyToast.DEFAULT,true).show()
         }
 
         //        Pending Jobs
@@ -128,8 +118,10 @@ class dashboardFragment : Fragment() {
                 dbPendingCounter.setText("0")
             }
         pendingJobsLayout.setOnClickListener {
-            Toast.makeText(context, "Total Pending Jobs : ${dbPendingCounter.text.toString()} \n Job Year :  $currentYear" +
-                    "\n Current date : $currentDate", Toast.LENGTH_LONG).show()
+//            Toast.makeText(context, "Total Pending Jobs : ${dbPendingCounter.text.toString()} \n Job Year :  $currentYear" +
+//                    "\n Current date : $currentDate", Toast.LENGTH_LONG).show()
+            FancyToast.makeText(context,"Total Pending Jobs : ${dbPendingCounter.text.toString()} \n Job Year :  $currentYear" +
+                    "\n Current date : $currentDate",FancyToast.LENGTH_LONG,FancyToast.DEFAULT,true).show()
         }
 //        Days Worked
         var duration : Int = 0
@@ -151,8 +143,10 @@ class dashboardFragment : Fragment() {
             }
 
         workDaysLayout.setOnClickListener {
-            Toast.makeText(context, "Total Worked Days : ${dbWorkedDays.text.toString()} \n Job Year :  $currentYear" +
-                    "\n Current date : $currentDate", Toast.LENGTH_LONG).show()
+//            Toast.makeText(context, "Total Worked Days : ${dbWorkedDays.text.toString()} \n Job Year :  $currentYear" +
+//                    "\n Current date : $currentDate", Toast.LENGTH_LONG).show()
+            FancyToast.makeText(context,"Total Worked Days : ${dbWorkedDays.text.toString()} \n Job Year :  $currentYear" +
+                    "\n Current date : $currentDate",FancyToast.LENGTH_LONG,FancyToast.DEFAULT,true).show()
         }
 
         //        Site Visited
@@ -171,8 +165,10 @@ class dashboardFragment : Fragment() {
             }
 
         customerVisitLayout.setOnClickListener {
-            Toast.makeText(context, "Total Customer Visits : ${dbCustomerVisited.text.toString()} \n Job Year :  $currentYear" +
-                    "\n Current date : $currentDate", Toast.LENGTH_LONG).show()
+//            Toast.makeText(context, "Total Customer Visits : ${dbCustomerVisited.text.toString()} \n Job Year :  $currentYear" +
+//                    "\n Current date : $currentDate", Toast.LENGTH_LONG).show()
+            FancyToast.makeText(context,"Total Customer Visits : ${dbCustomerVisited.text.toString()} \n Job Year :  $currentYear" +
+                    "\n Current date : $currentDate",FancyToast.LENGTH_LONG,FancyToast.DEFAULT,true).show()
         }
     }
 
@@ -183,17 +179,5 @@ class dashboardFragment : Fragment() {
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            dashboardFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

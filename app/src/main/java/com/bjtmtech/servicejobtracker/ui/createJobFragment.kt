@@ -86,6 +86,7 @@ class createJobFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //Get Names of customers on view Created
+    try{
             db.collection("customerNames")
                 .get()
                 .addOnSuccessListener { result ->
@@ -94,15 +95,21 @@ class createJobFragment : Fragment(){
 //                        Log.d(TAG, "${document.id} => ${document.data["name"]}")
                         customersName.add(document.data["name"].toString())
                     }
+try{
 
-
-                    val arrayAdapter = ArrayAdapter(requireContext(), R.layout.customer_name_dropdown_items, customersName)
+                    val arrayAdapter = ArrayAdapter(context!!, R.layout.customer_name_dropdown_items, customersName)
                     cjCustomerName.setAdapter(arrayAdapter)
-
+ }catch (e:Exception){
+                Log.e(TAG, e.printStackTrace().toString())
+            }
                 }
                 .addOnFailureListener { exception ->
                     Log.d(TAG, "Error getting documents: ", exception)
                 }
+
+     }catch (e:Exception){
+                Log.e(TAG, e.printStackTrace().toString())
+            }
 
                 //        Code to getting country list
                 val countryNamesList = ArrayList<String>()
@@ -116,10 +123,13 @@ class createJobFragment : Fragment(){
                 for (s in countriesList) {
                     countryNamesList.add(s)
                 }
-
-                val arrayAdapterCountry = ArrayAdapter(requireContext(), R.layout.customer_name_dropdown_items, countryNamesList)
+try{
+                val arrayAdapterCountry = ArrayAdapter(context!!, R.layout.customer_name_dropdown_items, countryNamesList)
                 cjCustomerCountry.setAdapter(arrayAdapterCountry)
-
+     }catch (e:Exception){
+                Log.e(TAG, e.printStackTrace().toString())
+            }
+try{
 
             //Get jobTypes on view Created
             db.collection("jobTypes")
@@ -130,15 +140,20 @@ class createJobFragment : Fragment(){
         //                        Log.d(TAG, "${document.id} => ${document.data["name"]}")
                         jobTypesList.add(document.data["name"].toString())
                     }
+try{
 
-
-                    val arrayAdapter = ArrayAdapter(requireContext(), R.layout.customer_name_dropdown_items, jobTypesList)
+                    val arrayAdapter = ArrayAdapter(context!!, R.layout.customer_name_dropdown_items, jobTypesList)
                     cjJobType.setAdapter(arrayAdapter)
-
+ }catch (e:Exception){
+                Log.e(TAG, e.printStackTrace().toString())
+            }
                 }
                 .addOnFailureListener { exception ->
                     Log.d(TAG, "Error getting documents: ", exception)
                 }
+     }catch (e:Exception){
+                Log.e(TAG, e.printStackTrace().toString())
+            }
 
 
         val dataSetListenerStart = object: DatePickerDialog.OnDateSetListener{
@@ -228,7 +243,7 @@ class createJobFragment : Fragment(){
         val createdDateQuery = sdf.format(timestamp).toString() //createdDate time stamp
 
 //      Check if there is an active job if yes prevent new job creation else allow job creation
-
+try{
        db.collection("createdJobs")
             .whereEqualTo("engineerEmail",engineerEmailQuery.toString())
             .whereEqualTo("jobStatus","ACTIVE")
@@ -245,6 +260,8 @@ class createJobFragment : Fragment(){
                 && engineerEmailQuery.toString().isNotEmpty() && engineerNameQuery.toString().isNotEmpty()
                 && engineerCountryQuery.toString().isNotEmpty()
                 && createdDateQuery.isNotEmpty() && jobTypeQuery.isNotEmpty()){
+
+                var docRef  = customerNameQuery.toString().split(" ")[0]+"-"+sdfwt.format(timestamp).toString().replace("\\s".toRegex(), "")
 //create a data map
                 val jobData = hashMapOf(
                     "customerName" to customerNameQuery.toString(),
@@ -260,10 +277,11 @@ class createJobFragment : Fragment(){
                     "createdDate" to createdDateQuery.toString(),
                     "createdMonth" to createdMonth.toString(),
                     "createdYear" to createdYear.toString(),
-                    "jobStatus" to jobStatusQuery.toString()
+                    "jobStatus" to jobStatusQuery.toString(),
+                    "id" to docRef.toString()
                 )
 //Database Update query
-                var docRef  = customerNameQuery.toString().split(" ")[0]+"-"+sdfwt.format(timestamp).toString().replace("\\s".toRegex(), "")
+
                 db.collection("createdJobs").document(docRef.toString())
                     .set(jobData)
                     .addOnSuccessListener { documentReference ->
@@ -287,6 +305,9 @@ class createJobFragment : Fragment(){
             .addOnFailureListener { exception ->
                 Log.d(TAG, "get failed with ", exception)
             }
+     }catch (e:Exception){
+                Log.e(TAG, e.printStackTrace().toString())
+            }
 
     }
 
@@ -308,6 +329,7 @@ class createJobFragment : Fragment(){
 
     private fun getuserProfileDetails(FIELDREF : String){
         Log.d(TAG, "Function Called")
+        try{
         db.collection("users")
             .whereEqualTo("email", FIELDREF)
             .get()
@@ -326,6 +348,9 @@ class createJobFragment : Fragment(){
             }
             .addOnFailureListener { exception ->
                 Log.w(TAG, "Error getting documents: ", exception)
+            }
+             }catch (e:Exception){
+                Log.e(TAG, e.printStackTrace().toString())
             }
     }
 

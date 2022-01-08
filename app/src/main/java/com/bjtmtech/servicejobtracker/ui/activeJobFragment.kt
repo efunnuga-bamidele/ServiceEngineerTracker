@@ -2,10 +2,14 @@ package com.bjtmtech.servicejobtracker.ui
 
 import android.app.DatePickerDialog
 import android.content.ContentValues.TAG
-import android.content.Intent
+import android.content.Context
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,15 +26,21 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.shashank.sony.fancytoastlib.FancyToast
 import kotlinx.android.synthetic.main.fragment_active_job.*
 import kotlinx.android.synthetic.main.fragment_create_job.*
-//import kotlinx.android.synthetic.main.fragment_create_job.*
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.logging.SimpleFormatter
+import kotlin.Exception
+//import androidx.test.core.app.ApplicationProvider.getApplicationContext
+
+
+
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,10 +73,11 @@ class activeJobFragment : Fragment(){
     var stopYear:Int = calendar.get(Calendar.YEAR)
     var stopMonth:Int = calendar.get(Calendar.MONTH)
     var stopDay:Int = calendar.get(Calendar.DAY_OF_MONTH)
+    var dataRef: String ?= null
 
     private var PRIVATE_MODE = 0
     val db = Firebase.firestore
-    var dataRef: String ?= null
+
 
 
 
@@ -103,54 +114,68 @@ class activeJobFragment : Fragment(){
 
 
 
+try {
 
-
-        db.collection("createdJobs").whereEqualTo("engineerEmail", engineerEmailQuery.toString())
-            .whereEqualTo("jobStatus", "ACTIVE")
-            .whereEqualTo("createdYear",currentYear)
-            .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents){
-                    dataRef = document.id
+    db.collection("createdJobs").whereEqualTo("engineerEmail", engineerEmailQuery.toString())
+        .whereEqualTo("jobStatus", "ACTIVE")
+        .whereEqualTo("createdYear", currentYear)
+        .get()
+        .addOnSuccessListener { documents ->
+            for (document in documents) {
+                dataRef = document.id
 //                    Toast.makeText(context, dataRef, Toast.LENGTH_SHORT).show()
-                    ajCustomerName.setText(document.data.get("customerName").toString())
-                    ajCustomerCountry.setText(document.data.get("customerCountry").toString())
-                    ajCustomerState.setText(document.data.get("customerState").toString())
-                    ajBtnStartDate.setText("START:\n"+document.data.get("startDate").toString())
-                    ajBtnStopDate.setText("STOP:\n"+document.data.get("stopDate").toString())
-                    ajDateRangeText.setText(document.data.get("jobDuration").toString())
-                    ajJobType.setText(document.data.get("jobType").toString())
-                }
+                ajCustomerName.setText(document.data.get("customerName").toString())
+                ajCustomerCountry.setText(document.data.get("customerCountry").toString())
+                ajCustomerState.setText(document.data.get("customerState").toString())
+                ajBtnStartDate.setText("START:\n" + document.data.get("startDate").toString())
+                ajBtnStopDate.setText("STOP:\n" + document.data.get("stopDate").toString())
+                ajDateRangeText.setText(document.data.get("jobDuration").toString())
+                ajJobType.setText(document.data.get("jobType").toString())
             }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents: ", exception)
-            }
-
+        }
+        .addOnFailureListener { exception ->
+            Log.w(TAG, "Error getting documents: ", exception)
+        }
+}catch (e:Exception){
+    Log.e(TAG, e.printStackTrace().toString())
+}
         var navView: NavigationView = (activity as MainActivity).findViewById(R.id.nav_view)
 
         ajCompleteJob.setOnClickListener {
-            val updateRef = db.collection("createdJobs").document(dataRef.toString())
-            updateRef
+            try {
+                val updateRef = db.collection("createdJobs").document(dataRef.toString())
+                updateRef
 //                .update("jobStatus", "COMPLETED")
-                .update(mapOf(
-                    "jobStatus" to "COMPLETED",
-                    "updatedDate" to FieldValue.serverTimestamp()
-                ))
+                    .update(
+                        mapOf(
+                            "jobStatus" to "COMPLETED",
+                            "updatedDate" to FieldValue.serverTimestamp()
+                        )
+                    )
 
-                .addOnSuccessListener {
+                    .addOnSuccessListener {
 //                    Log.d(TAG, "Job completed successfully!")
-                    (activity as MainActivity).replaceFragment(dashboardFragment(), "Dashboard")
-                    navView.setCheckedItem(R.id.nav_dashboard)
-                    Toast.makeText(context, "Job completed successfully", Toast.LENGTH_SHORT).show()
-                }
+                        (activity as MainActivity).replaceFragment(dashboardFragment(), "Dashboard")
+                        navView.setCheckedItem(R.id.nav_dashboard)
+                        Toast.makeText(context, "Job completed successfully", Toast.LENGTH_SHORT)
+                            .show()
+                    }
 
-                .addOnFailureListener { e ->
+                    .addOnFailureListener { e ->
 //                    Log.w(TAG, "Error updating document", e)
-                    Toast.makeText(context, "Error completing job! Please try again", Toast.LENGTH_SHORT).show()
-                }
+                        Toast.makeText(
+                            context,
+                            "Error completing job! Please try again",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+            }catch (e:Exception){
+                Log.e(TAG, e.printStackTrace().toString())
+            }
         }
 
         ajPendJob.setOnClickListener {
+            try{
             val updateRef = db.collection("createdJobs").document(dataRef.toString())
             updateRef
                 .update(mapOf(
@@ -168,9 +193,13 @@ class activeJobFragment : Fragment(){
 //                    Log.w(TAG, "Error updating document", e)
                     Toast.makeText(context, "Error pending job! Please try again", Toast.LENGTH_SHORT).show()
                 }
+            }catch (e:Exception){
+                Log.e(TAG, e.printStackTrace().toString())
+            }
         }
 
         ajCancelJob.setOnClickListener {
+            try{
             val updateRef = db.collection("createdJobs").document(dataRef.toString())
             updateRef
                 .update(mapOf(
@@ -188,13 +217,18 @@ class activeJobFragment : Fragment(){
 //                    Log.w(TAG, "Error updating document", e)
                     Toast.makeText(context, "Error canceling job! Please try again", Toast.LENGTH_SHORT).show()
                 }
+            }catch (e:Exception){
+                Log.e(TAG, e.printStackTrace().toString())
+            }
         }
 
         ajEditJob.setOnClickListener {
             Toast.makeText(context, "Edit function is now enabled!", Toast.LENGTH_SHORT).show()
             enableInterfaceComponents()
             getAllListDetails()
-            ajBtnStopDate.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(),R.color.btnFaded))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ajBtnStopDate.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(),R.color.btnFaded))
+            }
 
         }
 
@@ -284,7 +318,7 @@ class activeJobFragment : Fragment(){
                     && customerStateQuery!!.isNotEmpty() && startDateQuery!!.isNotEmpty()
                     && stopDateQuery!!.isNotEmpty() && jobDurationQuery!!.isNotEmpty()
                     && jobTypeQuery!!.isNotEmpty()){
-
+try{
                     db.collection("createdJobs").document(dataRef.toString())
                         .update(mapOf(
                             "customerName" to customerNameQuery.toString(),
@@ -304,6 +338,9 @@ class activeJobFragment : Fragment(){
                         .addOnFailureListener { exception ->
                             Toast.makeText(context, "Error updating job!", Toast.LENGTH_SHORT).show()
                         }
+     }catch (e:Exception){
+                Log.e(TAG, e.printStackTrace().toString())
+            }
                 }else{
                     Toast.makeText(context, "Some details are missing, Please check all fields!", Toast.LENGTH_SHORT).show()
                 }
@@ -315,7 +352,47 @@ class activeJobFragment : Fragment(){
 
         }
 
+        isOnline(context!!)
     }
+
+
+
+    fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+//                    Toast.makeText(context, "NetworkCapabilities.TRANSPORT_CELLULAR", Toast.LENGTH_SHORT).show()
+                    FancyToast.makeText(context,"NetworkCapabilities.TRANSPORT_CELLULAR",
+                        FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show()
+//                    val toast = FancyToast.makeText(
+//                        context,
+//                        "YNetworkCapabilities.TRANSPORT_CELLULAR", Toast.LENGTH_SHORT,FancyToast.SUCCESS,true
+//                    )
+//                    toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 150)
+//                    toast.show()
+
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    Toast.makeText(context, "NetworkCapabilities.TRANSPORT_WIFI", Toast.LENGTH_SHORT).show()
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    Toast.makeText(context, "NetworkCapabilities.TRANSPORT_ETHERNET", Toast.LENGTH_SHORT).show()
+                    return true
+                }
+            }
+        }
+        Toast.makeText(context, "NetworkCapabilities.False", Toast.LENGTH_SHORT).show()
+        Log.i("Internet", "NetworkCapabilities.False")
+        return false
+    }
+
 
     private fun updateDateStartDate() {
         val myFormat = "MM.dd.yyyy"
@@ -363,23 +440,23 @@ class activeJobFragment : Fragment(){
 
     private fun getAllListDetails() {
         //Get Names of customers on view Created
-        db.collection("customerNames")
-            .get()
-            .addOnSuccessListener { result ->
-                val customersName = ArrayList<String>()
-                for (document in result) {
-//                        Log.d(TAG, "${document.id} => ${document.data["name"]}")
-                    customersName.add(document.data["name"].toString())
-                }
-
-
-                val arrayAdapter = ArrayAdapter(requireContext(), R.layout.customer_name_dropdown_items, customersName)
-                ajCustomerName.setAdapter(arrayAdapter)
-
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "Error getting documents: ", exception)
-            }
+//        db.collection("customerNames")
+//            .get()
+//            .addOnSuccessListener { result ->
+//                val customersName = ArrayList<String>()
+//                for (document in result) {
+////                        Log.d(TAG, "${document.id} => ${document.data["name"]}")
+//                    customersName.add(document.data["name"].toString())
+//                }
+//
+//
+//                val arrayAdapter = ArrayAdapter(requireContext(), R.layout.customer_name_dropdown_items, customersName)
+//                ajCustomerName.setAdapter(arrayAdapter)
+//
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.d(TAG, "Error getting documents: ", exception)
+//            }
         //        Code to getting country list
         val countryNamesList = ArrayList<String>()
         val countriesList: MutableList<String> = ArrayList()
@@ -398,6 +475,7 @@ class activeJobFragment : Fragment(){
 
 
         //Get jobTypes on view Created
+        try{
         db.collection("jobTypes")
             .get()
             .addOnSuccessListener { result ->
@@ -415,11 +493,14 @@ class activeJobFragment : Fragment(){
             .addOnFailureListener { exception ->
                 Log.d(TAG, "Error getting documents: ", exception)
             }
+             }catch (e:Exception){
+                Log.e(TAG, e.printStackTrace().toString())
+            }
     }
 
     private fun enableInterfaceComponents() {
-        ajCustomerName.isEnabled = true
-        ajCustomerName.isClickable = true
+//        ajCustomerName.isEnabled = true
+//        ajCustomerName.isClickable = true
 ///////////////////////////////////////////////
         ajCustomerCountry.isEnabled = true
         ajCustomerCountry.isClickable = true
