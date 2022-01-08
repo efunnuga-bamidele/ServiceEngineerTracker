@@ -48,30 +48,6 @@
 
     </item>
 
-    <item android:title="Administrator Settings">
-        <menu>
-            <group android:checkableBehavior="single"
-                >
-                <item
-                    android:id="@+id/nav_manageusers"
-                    android:title="@string/manageusers"
-                    android:icon="@drawable/ic_baseline_people_alt_24"/>
-
-                <item
-                    android:id="@+id/nav_occupancy"
-                    android:title="@string/occupancy"
-                    android:icon="@drawable/ic_baseline_preview_24"
-                    />
-                <item
-                    android:id="@+id/nav_managedb"
-                    android:title="@string/managedb"
-                    android:icon="@drawable/ic_baseline_storage_24"
-                    />
-            </group>
-        </menu>
-
-    </item>
-
     <item android:title="Profile Settings">
         <menu>
             <group android:checkableBehavior="single">

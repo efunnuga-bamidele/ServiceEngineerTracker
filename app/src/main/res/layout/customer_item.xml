@@ -14,44 +14,56 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#fff"
+        android:layout_height="wrap_content">
 
-<!--        <de.hdodenhof.circleimageview.CircleImageView-->
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:padding="10dp"
             android:src="@drawable/img_4" />
 
         <TextView
-            android:id="@+id/text_view_id"
+            android:id="@+id/cvId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:text="ID"
-            android:layout_toRightOf="@+id/imageView"
             android:layout_marginLeft="20dp"
-            android:layout_margin="4dp"
-            android:textColor="@color/colorPurple"
-            android:textSize="20sp"
+            android:layout_marginTop="12dp"
+            android:layout_toRightOf="@+id/imageView"
+            android:fontFamily="sans-serif"
+            android:text="id"
+            android:textColor="@color/btnDanger"
+            android:textSize="13sp"
             android:textStyle="bold" />
 
+
         <TextView
-            android:id="@+id/text_view_customer_name"
+            android:id="@+id/cvCustomerName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text_view_id"
-            android:fontFamily="sans-serif-light"
-            android:layout_toRightOf="@+id/imageView"
+            android:layout_below="@id/cvId"
             android:layout_marginLeft="20dp"
-            android:layout_margin="4dp"
-            android:text="Company Name"
-            android:textColor="#000000"
-            android:textSize="16sp" />
+            android:layout_toRightOf="@id/imageView"
+            android:fontFamily="sans-serif"
+            android:text="Sample Customer Name"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/myButton"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:clickable="true"
+            android:text="Edit"
+            android:textAllCaps="false"
+            android:textColor="#fff" />
+
 
     </RelativeLayout>
 

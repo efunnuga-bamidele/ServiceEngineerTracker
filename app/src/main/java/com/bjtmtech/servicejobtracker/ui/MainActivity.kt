@@ -39,9 +39,6 @@ class MainActivity : AppCompatActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        val messageTextView2: TextView = findViewById(R.id.user_email)
-//        messageTextView2.text = message2
-//
             navView = findViewById(R.id.nav_view)
 
 
@@ -71,10 +68,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_jobHistory -> replaceFragment(jobHistoryFragment(), it.title.toString())
                 R.id.nav_jobType -> replaceFragment(jobtypeFragment(), it.title.toString())
 //                R.id.nav_language -> replaceFragment(languageFragment(), it.title.toString())
-                R.id.nav_manageusers -> replaceFragment(manageusersFragment(), it.title.toString())
                 R.id.nav_customers -> replaceFragment(customersFragment(), it.title.toString())
-                R.id.nav_occupancy -> replaceFragment(occupancyFragment(), it.title.toString())
-                R.id.nav_managedb -> replaceFragment(managedbFragment(), it.title.toString())
                 R.id.nav_profile -> replaceFragment(profileFragment(), it.title.toString())
                 R.id.nav_logout -> signout()
             }
@@ -95,15 +89,9 @@ class MainActivity : AppCompatActivity() {
                     if(document.data["email"] == userDetail){
 //                        Toast.makeText(this, document.data["level"].toString(), Toast.LENGTH_SHORT).show()
                         if (document.data["level"].toString() == "Admin"){
-                            navView.menu.findItem(R.id.nav_manageusers).isVisible = true
-                            navView.menu.findItem(R.id.nav_occupancy).isVisible = true
-                            navView.menu.findItem(R.id.nav_managedb).isVisible = true
-//                            navView.menu.findItem(R.id.nav_customers).isVisible = true
+
                         }else{
-                            navView.menu.findItem(R.id.nav_manageusers).isVisible = false
-                            navView.menu.findItem(R.id.nav_occupancy).isVisible = false
-                            navView.menu.findItem(R.id.nav_managedb).isVisible = false
-//                            navView.menu.findItem(R.id.nav_customers).isVisible = false
+
                         }
                         break
                     }
@@ -155,14 +143,6 @@ class MainActivity : AppCompatActivity() {
 //            navView.setCheckedItem(0)
             return true
         }
-//        if (id == R.id.action_two) {
-//            Toast.makeText(this, "Item Two Clicked", Toast.LENGTH_LONG).show()
-//            return true
-//        }
-//        if (id == R.id.action_three) {
-//            Toast.makeText(this, "Item Three Clicked", Toast.LENGTH_LONG).show()
-//            return true
-//        }
         return super.onOptionsItemSelected(item)
     }
 

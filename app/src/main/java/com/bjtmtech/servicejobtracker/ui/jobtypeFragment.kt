@@ -48,7 +48,7 @@ class jobtypeFragment : Fragment() {
 
         var navView: NavigationView = (activity as MainActivity).findViewById(R.id.nav_view)
 
-        database = FirebaseFirestore.getInstance()
+//        database = FirebaseFirestore.getInstance()
         recyclerView = jtvRecyclerView
 
         recyclerView.layoutManager = LinearLayoutManager(context)
