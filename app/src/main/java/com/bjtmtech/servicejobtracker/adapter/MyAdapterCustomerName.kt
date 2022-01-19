@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bjtmtech.servicejobtracker.R
 import com.bjtmtech.servicejobtracker.data.CustomerName
 
-class MyAdapterCustomerName(private val customerNameList : ArrayList<CustomerName>) : RecyclerView.Adapter<MyAdapterCustomerName.MyViewHolder>(){
+class MyAdapterCustomerName(private val customerNameList : MutableList<CustomerName>) : RecyclerView.Adapter<MyAdapterCustomerName.MyViewHolder>(){
 
     private lateinit var mListener : onItemClickListener
 
@@ -27,7 +27,7 @@ class MyAdapterCustomerName(private val customerNameList : ArrayList<CustomerNam
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
             R.layout.customer_item,
-        parent, false)
+            parent, false)
 
         return MyViewHolder(itemView, mListener)
     }
@@ -42,7 +42,7 @@ class MyAdapterCustomerName(private val customerNameList : ArrayList<CustomerNam
     }
 
     override fun getItemCount(): Int {
-      return customerNameList.size
+        return customerNameList.size
     }
 
     public class MyViewHolder(itemView: View, listener: onItemClickListener) : RecyclerView.ViewHolder(itemView){

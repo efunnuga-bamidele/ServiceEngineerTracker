@@ -1,7 +1,11 @@
 package com.bjtmtech.servicejobtracker
 
 import android.content.ContentValues.TAG
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bjtmtech.servicejobtracker.adapter.MyAdapterJobType
 import com.bjtmtech.servicejobtracker.data.JobTypes
+import com.bjtmtech.servicejobtracker.ui.LoadingDialog
 import com.bjtmtech.servicejobtracker.ui.MainActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.firestore.*
@@ -20,7 +25,9 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
+import com.shashank.sony.fancytoastlib.FancyToast
 import kotlinx.android.synthetic.main.fragment_jobtype.*
+import java.io.IOException
 import kotlin.collections.ArrayList
 
 
@@ -35,8 +42,9 @@ class jobtypeFragment : Fragment() {
     private lateinit var recyclerView : RecyclerView
     private lateinit var  jobsArrayList : ArrayList<JobTypes>
     private lateinit var  myAdapter : MyAdapterJobType
-    private lateinit var  database: FirebaseFirestore
 
+    val loading = LoadingDialog(this)
+    val handle = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,16 +88,19 @@ class jobtypeFragment : Fragment() {
 
         EventChangeListener()
 
+        isOnline(context!!)
         //Call the action to create the table data
         jtCreateButton.setOnClickListener {
-
+    if (isOnline(context!!)){
+        try{
+            loading.startLoading()
             db.collection("jobTypes")
                 .get()
                 .addOnSuccessListener { result ->
                     dataSize = result.size()
 
                     // Get te datas from the text input
-                    val jobType = jtJobType.text.toString().trim()
+                    val jobType = jtJobType.text.toString().capitalize().trim()
                     val jtID = dataSize + 1
 
                     // Create a job hashmap
@@ -101,18 +112,35 @@ class jobtypeFragment : Fragment() {
                     db.collection("jobTypes").document(job["UID"].toString())
                         .set(job)
                         .addOnSuccessListener { documentReference ->
-                            Toast.makeText(context,"Job type successfully written!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Job type successfully written!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            handle.postDelayed({
+                                loading.isDismiss()
+                            }, 1000)
                             jobsArrayList.clear()
                             EventChangeListener()
                             jtJobType.text!!.clear()
                         }
                         .addOnFailureListener { e ->
-                            Toast.makeText(context, "Error adding job type!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Error adding job type!", Toast.LENGTH_SHORT)
+                                .show()
+                            handle.postDelayed({
+                                loading.isDismiss()
+                            }, 1000)
                         }
                 }
                 .addOnFailureListener { exception ->
                     Log.w(TAG, "Error getting documents.", exception)
+                    loading.isDismiss()
                 }
+        }catch (e : IOException){
+            loading.isDismiss()
+            FancyToast.makeText(context, "Error while fetching data from database", FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show()
+        }
+        }
 
 //
         }
@@ -120,33 +148,96 @@ class jobtypeFragment : Fragment() {
 
 
         jtUpdateButton.setOnClickListener {
+            if(isOnline(context!!)) {
+                try {
+                    loading.startLoading()
+                    db.collection("jobTypes").document(EditUID.toString())
+                        .update("name", jtJobType.text.toString().capitalize().trim())
+                        .addOnSuccessListener {
+                            Toast.makeText(
+                                context,
+                                "Job type successfully updated!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            handle.postDelayed({
+                                loading.isDismiss()
+                            }, 1000)
+                            jobsArrayList.clear()
+                            EventChangeListener()
+                            jtJobType.text!!.clear()
 
-            db.collection("jobTypes").document(EditUID.toString())
-                .update("name", jtJobType.text.toString())
-                .addOnSuccessListener {
-                    Toast.makeText(context,"Job type successfully updated!", Toast.LENGTH_SHORT).show()
-                    jobsArrayList.clear()
-                    EventChangeListener()
-                    jtJobType.text!!.clear()
-
+                        }
+                        .addOnFailureListener {
+                            handle.postDelayed({
+                                loading.isDismiss()
+                            }, 1000)
+                            Toast.makeText(
+                                context,
+                                "Error updating job type!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                } catch (e: IOException) {
+                    handle.postDelayed({
+                        loading.isDismiss()
+                    }, 1000)
+                    FancyToast.makeText(
+                        context,
+                        "Error while fetching data from database",
+                        FancyToast.LENGTH_SHORT,
+                        FancyToast.ERROR,
+                        true
+                    ).show()
                 }
-                .addOnFailureListener {  Toast.makeText(context,"Error updating job type!", Toast.LENGTH_SHORT).show()}
-
+            }
         }
 
         jtDeleteButton.setOnClickListener {
+            if (isOnline(context!!)) {
+                try {
+                    loading.startLoading()
+                    db.collection("jobTypes").document(EditUID.toString())
+                        .delete()
+                        .addOnSuccessListener {
 
-            db.collection("jobTypes").document(EditUID.toString())
-                .delete()
-                .addOnSuccessListener {
-                    Toast.makeText(context,"Job type successfully deleted!", Toast.LENGTH_SHORT).show()
-                    jobsArrayList.clear()
-                    EventChangeListener()
-                    jtJobType.text!!.clear()
+                            Toast.makeText(
+                                context,
+                                "Job type successfully deleted!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            handle.postDelayed({
+                                loading.isDismiss()
+                            }, 1000)
+                            jobsArrayList.clear()
+                            EventChangeListener()
+                            jtJobType.text!!.clear()
+
+                        }
+                        .addOnFailureListener {
+                            handle.postDelayed({
+                                loading.isDismiss()
+                            }, 1000)
+                            Toast.makeText(
+                                context,
+                                "Error deleting job type!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                        }
+                } catch (e: IOException) {
+                    handle.postDelayed({
+                        loading.isDismiss()
+                    }, 1000)
+                    FancyToast.makeText(
+                        context,
+                        "Error while fetching data from database",
+                        FancyToast.LENGTH_SHORT,
+                        FancyToast.ERROR,
+                        true
+                    ).show()
 
                 }
-                .addOnFailureListener {  Toast.makeText(context,"Error deleting job type!", Toast.LENGTH_SHORT).show()}
-
+            }
         }
 
         jtClearButton.setOnClickListener {
@@ -155,12 +246,9 @@ class jobtypeFragment : Fragment() {
         }
     }
 
-    private fun triggerRecycler() {
-
-
-    }
 
     private fun EventChangeListener() {
+        try{
         db.collection("jobTypes").
         addSnapshotListener(object : EventListener<QuerySnapshot>{
             override fun onEvent(
@@ -170,6 +258,10 @@ class jobtypeFragment : Fragment() {
                 if (error != null){
                     Log.e("Firestore", error.message.toString())
                     return
+                }
+
+                for (i in jobsArrayList.indices) {
+                    jobsArrayList.removeAt(0)
                 }
 
                 for(dc : DocumentChange in value?.documentChanges!!){
@@ -182,7 +274,41 @@ class jobtypeFragment : Fragment() {
             }
 
         })
+        } catch (e: IOException) {
+            FancyToast.makeText(
+                context,
+                "Error while fetching data from database",
+                FancyToast.LENGTH_SHORT,
+                FancyToast.ERROR,
+                true
+            ).show()
+        }
     }
+
+
+    fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        FancyToast.makeText(context, "Error checking internet connection!", FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show()
+        return false
+    }
+
 
     private fun setup() {
 

@@ -4,8 +4,13 @@ package com.bjtmtech.servicejobtracker.ui
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.bjtmtech.servicejobtracker.R
@@ -13,23 +18,29 @@ import com.bjtmtech.servicejobtracker.data.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.shashank.sony.fancytoastlib.FancyToast
 import kotlinx.android.synthetic.main.activity_register.*
+import java.io.IOException
 import java.util.*
+
 
 class RegisterActivity : AppCompatActivity() {
 
-//    private lateinit var binding : ActivityRegisterBinding
-//    private lateinit var database : DatabaseReference
     val db = Firebase.firestore
     private lateinit var auth : FirebaseAuth
     lateinit var shared : SharedPreferences
-
+    private val calendar = Calendar.getInstance()
+    var startYear:Int = calendar.get(Calendar.YEAR)
+    var loading = LoadingActivity(this)
+    val handle = Handler()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_register)
 
         auth = FirebaseAuth.getInstance()
+
+        copyRightView.text = "Copyright @ $startYear"
 
 
         //        Code to getting country list
@@ -60,7 +71,7 @@ class RegisterActivity : AppCompatActivity() {
             val lastName = lastNameEditText.text.toString().trim()
             val country = countryEditText.text.toString().trim()
             val jobTitle = jobTitleEditText.text.toString().trim()
-            val email = emailEditText.text.toString().trim()
+            val email = emailEditText.text.toString().lowercase().trim()
             val password = initialPassword.text.toString().trim()
             val retypePassword = reTypePassword.text.toString().trim()
 
@@ -73,7 +84,10 @@ class RegisterActivity : AppCompatActivity() {
                 if( password == retypePassword){
 
                     val User = User(firstName, lastName, country, jobTitle, email)
+                    if(isOnline(this)){
 
+                        try{
+                            loading.startLoading()
                     auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(
                         RegisterActivity()
                     ) {
@@ -99,25 +113,25 @@ class RegisterActivity : AppCompatActivity() {
                             db.collection("users").document(user["firstName"].toString()+"_"+user["lastName"].toString())
                                 .set(user)
                                 .addOnSuccessListener { documentReference ->
-                                    firstNameEditText.text!!.clear()
-                                    lastNameEditText.text!!.clear()
-                                    countryEditText.text!!.clear()
-                                    jobTitleEditText.text!!.clear()
-                                    emailEditText.text!!.clear()
-                                    initialPassword.text!!.clear()
-                                    reTypePassword.text!!.clear()
+                                    clearField()
 
                                     Toast.makeText(
                                         this,
                                         "User Profile Created!",
                                         Toast.LENGTH_SHORT
-                                    )
-                                        .show()
-                                    val intent = Intent(this, LoginActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
+                                    ).show()
+                                    handle.postDelayed({
+                                        loading.isDismiss()
+                                        val intent = Intent(this, LoginActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
+                                    },1000)
+
                                 }
                                 .addOnFailureListener { e ->
+                                    handle.postDelayed({
+                                        loading.isDismiss()
+                                    },1000)
                                     Toast.makeText(
                                         this,
                                         "User Registration Failed! Please try again",
@@ -137,7 +151,6 @@ class RegisterActivity : AppCompatActivity() {
                                             "User Already Exist Logging In User",
                                             Toast.LENGTH_SHORT
                                         ).show()
-
                                         var userName = email.split("@")[0]
                                         var dashboardIntent = Intent(this, MainActivity::class.java)
                                         shared = getSharedPreferences("myProfile" , Context.MODE_PRIVATE)
@@ -146,31 +159,103 @@ class RegisterActivity : AppCompatActivity() {
                                         edit.putString("name", userName)
                                         edit.apply()
 
-                                        startActivity(dashboardIntent)
-                                        finish()
+                                        handle.postDelayed({
+                                            loading.isDismiss()
+                                            startActivity(dashboardIntent)
+                                            finish()
+                                        },1000)
+
 
                                     }else{
-                                        Toast.makeText(
+                                        handle.postDelayed({
+                                            loading.isDismiss()
+                                        },1000)
+                                        FancyToast.makeText(
                                             this,
                                             "User Registration Failed! Please try again",
-                                            Toast.LENGTH_SHORT
+                                            FancyToast.LENGTH_SHORT,
+                                            FancyToast.ERROR,
+                                            true
                                         ).show()
 
                                     }
                                 }
                         }
                     }
+//                    End
+                        }catch (e: IOException){
+                            handle.postDelayed({
+                                loading.isDismiss()
+                            },1000)
+                            Log.e("ERROR", "Exception : $e");
 
+                        }
+                    }
 
                 }else{
-                    Toast.makeText(this, "Password and Re-Enter Password is not a Match! ", Toast.LENGTH_SHORT).show()
+                    FancyToast.makeText(
+                        this,
+                        "Password and Re-Enter Password is not a Match! ",
+                        FancyToast.LENGTH_SHORT,
+                        FancyToast.WARNING,
+                        true
+                    ).show()
                 }
 
             }else{
-                Toast.makeText(this, "Make sure all fields are filled", Toast.LENGTH_LONG).show()
+                FancyToast.makeText(
+                    this,
+                    "Make sure all fields are filled",
+                    FancyToast.LENGTH_SHORT,
+                    FancyToast.WARNING,
+                    true
+                ).show()
             }
 
         }
+
+        clearBtn.setOnClickListener {
+            clearField()
+        }
+    }
+
+    private fun clearField() {
+        firstNameEditText.text!!.clear()
+        lastNameEditText.text!!.clear()
+        countryEditText.text!!.clear()
+        jobTitleEditText.text!!.clear()
+        emailEditText.text!!.clear()
+        initialPassword.text!!.clear()
+        reTypePassword.text!!.clear()
+    }
+
+    fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+                } else {
+                    TODO("VERSION.SDK_INT < M")
+                }
+
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        FancyToast.makeText(context, "Error checking internet connection!", FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show()
+        return false
     }
 
 }

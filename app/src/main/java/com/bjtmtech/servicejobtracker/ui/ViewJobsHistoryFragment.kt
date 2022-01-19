@@ -8,8 +8,8 @@ import android.content.ContentValues.TAG
 import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,8 +28,10 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.shashank.sony.fancytoastlib.FancyToast
 import kotlinx.android.synthetic.main.fragment_active_job.*
 import kotlinx.android.synthetic.main.fragment_view_jobs_history.*
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -57,6 +59,8 @@ class ViewJobsHistoryFragment() : DialogFragment() {
     var alertDialog: AlertDialog? = null
 
     lateinit var navView: NavigationView
+    val handle = Handler()
+    val loading = LoadingDialog(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,14 +86,15 @@ class ViewJobsHistoryFragment() : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+//        loading.startLoading()
 
         navView = (activity as MainActivity).findViewById(R.id.nav_view)
 
         val tableAction = requireArguments().getString("action")
 
         if(tableAction == "Clicked"){
-            val tabelIndex = requireArguments().getString("key")
+//            val tabelIndex = requireArguments().getString("key")
+            val tabelIndex = requireArguments().getString("rowId")
             vjhCompleteJob.visibility = View.GONE
             vjhOpenJob.visibility = View.GONE
             vjhPendJob.visibility = View.GONE
@@ -98,50 +103,72 @@ class ViewJobsHistoryFragment() : DialogFragment() {
             vjhDeleteJob.visibility = View.GONE
             vjhtextLogoActive.setText("View Mode ")
 
-            db.collection("createdJobs").orderBy("createdDate", Query.Direction.DESCENDING)
+//            db.collection("createdJobs").orderBy("createdDate", Query.Direction.DESCENDING)
+            db.collection("createdJobs")
+                .whereEqualTo("id", tabelIndex)
                 .get()
                 .addOnSuccessListener { result ->
                     if (tabelIndex != null) {
-                        vjhCustomerName.setText(result.documents[tabelIndex.toInt()]["customerName"].toString())
-                        vjhCustomerCountry.setText(result.documents[tabelIndex.toInt()]["customerCountry"].toString())
-                        vjhCustomerState.setText(result.documents[tabelIndex.toInt()]["customerState"].toString())
-                        vjhBtnStartDate.setText("Start:\n"+result.documents[tabelIndex.toInt()]["startDate"].toString())
-                        vjhBtnStopDate.setText("Stop:\n"+result.documents[tabelIndex.toInt()]["stopDate"].toString())
-                        vjhDateRangeText.setText(result.documents[tabelIndex.toInt()]["jobDuration"].toString())
-                        vjhJobType.setText(result.documents[tabelIndex.toInt()]["jobType"].toString())
-                        vjhJobStatus.setText(result.documents[tabelIndex.toInt()]["jobStatus"].toString())
-                        vjhCreatedDate.setText(result.documents[tabelIndex.toInt()]["createdDate"].toString())
-                        vjhEngineerName.setText(result.documents[tabelIndex.toInt()]["engineerName"].toString())
-
+                        for (document in result) {
+                        vjhCustomerName.setText(document.data["customerName"].toString())
+                        vjhCustomerName.setText(document.data["customerName"].toString())
+                        vjhCustomerCountry.setText(document.data["customerCountry"].toString())
+                        vjhCustomerState.setText(document.data["customerState"].toString())
+                        vjhBtnStartDate.setText("Start:\n"+document.data["startDate"].toString())
+                        vjhBtnStopDate.setText("Stop:\n"+document.data["stopDate"].toString())
+                        vjhDateRangeText.setText(document.data["jobDuration"].toString())
+                        vjhJobType.setText(document.data["jobType"].toString())
+                        vjhJobStatus.setText(document.data["jobStatus"].toString())
+                        vjhCreatedDate.setText(document.data["createdDate"].toString())
+                        vjhEngineerName.setText(document.data["engineerName"].toString())
+                        }
+//                        val handle = Handler()
+//                        handle.postDelayed({
+//                            loading.isDismiss()
+//                        }, 2000)
                     }
                 }
         }else if (tableAction == "SwipeRight"){
-            val tabelIndex = requireArguments().getString("key")
+            val tabelIndex = requireArguments().getString("rowId")
             vjhtextLogoActive.setText("Edit Mode ")
             enabletextFields()
             getAllListDetails()
 
 
 
-            db.collection("createdJobs").orderBy("createdDate", Query.Direction.DESCENDING)
+            db.collection("createdJobs")
+                .whereEqualTo("id", tabelIndex)
                 .get()
                 .addOnSuccessListener { result ->
                     if (tabelIndex != null) {
-                        dataRef = result.documents[tabelIndex.toInt()]["id"].toString()
-                        vjhCustomerName.setText(result.documents[tabelIndex.toInt()]["customerName"].toString())
-                        vjhCustomerCountry.setText(result.documents[tabelIndex.toInt()]["customerCountry"].toString())
-                        vjhCustomerState.setText(result.documents[tabelIndex.toInt()]["customerState"].toString())
-                        vjhBtnStartDate.setText("Start:\n"+result.documents[tabelIndex.toInt()]["startDate"].toString())
-                        vjhBtnStopDate.setText("Stop:\n"+result.documents[tabelIndex.toInt()]["stopDate"].toString())
-                        vjhDateRangeText.setText(result.documents[tabelIndex.toInt()]["jobDuration"].toString())
-                        vjhJobType.setText(result.documents[tabelIndex.toInt()]["jobType"].toString())
-                        vjhJobStatus.setText(result.documents[tabelIndex.toInt()]["jobStatus"].toString())
-                        vjhCreatedDate.setText(result.documents[tabelIndex.toInt()]["createdDate"].toString())
-                        vjhEngineerName.setText(result.documents[tabelIndex.toInt()]["engineerName"].toString())
+
+                        for (document in result) {
+                            dataRef = document.data["id"].toString()
+                            vjhCustomerName.setText(document.data["customerName"].toString())
+                            vjhCustomerName.setText(document.data["customerName"].toString())
+                            vjhCustomerCountry.setText(document.data["customerCountry"].toString())
+                            vjhCustomerState.setText(document.data["customerState"].toString())
+                            vjhBtnStartDate.setText("Start:\n"+document.data["startDate"].toString())
+                            vjhBtnStopDate.setText("Stop:\n"+document.data["stopDate"].toString())
+                            vjhDateRangeText.setText(document.data["jobDuration"].toString())
+                            vjhJobType.setText(document.data["jobType"].toString())
+                            vjhJobStatus.setText(document.data["jobStatus"].toString())
+                            vjhCreatedDate.setText(document.data["createdDate"].toString())
+                            vjhEngineerName.setText(document.data["engineerName"].toString())
+                        }
 
                     }
+//                    val handle = Handler()
+//                    handle.postDelayed({
+//                        loading.isDismiss()
+//                    }, 2000)
                 }
 
+        }else{
+//            val handle = Handler()
+//            handle.postDelayed({
+//                loading.isDismiss()
+//            }, 2000)
         }
 
 
@@ -149,24 +176,33 @@ class ViewJobsHistoryFragment() : DialogFragment() {
             super.onDismiss(requireDialog())
         }
         vjhCompleteJob.setOnClickListener {
-
+        loading.startLoading()
             vjhJobStatus.setText("COMPLETED")
 
+        handle.postDelayed({
+            loading.isDismiss()
+        }, 1000)
         }
         vjhOpenJob.setOnClickListener {
-
+            loading.startLoading()
             vjhJobStatus.setText("ACTIVE")
-
+            handle.postDelayed({
+                loading.isDismiss()
+            }, 1000)
         }
         vjhPendJob.setOnClickListener {
-
+            loading.startLoading()
             vjhJobStatus.setText("PENDING")
-
+            handle.postDelayed({
+                loading.isDismiss()
+            }, 1000)
         }
         vjhCancelJob.setOnClickListener {
-
+            loading.startLoading()
             vjhJobStatus.setText("CANCELED")
-
+            handle.postDelayed({
+                loading.isDismiss()
+            }, 1000)
         }
 
         vjhUpdateJob.setOnClickListener {
@@ -207,7 +243,7 @@ class ViewJobsHistoryFragment() : DialogFragment() {
                     && customerStateQuery!!.isNotEmpty() && startDateQuery!!.isNotEmpty()
                     && stopDateQuery!!.isNotEmpty() && jobDurationQuery!!.isNotEmpty()
                     && jobTypeQuery!!.isNotEmpty()){
-
+                    loading.startLoading()
                     db.collection("createdJobs").document(dataRef.toString())
                         .update(mapOf(
                             "customerName" to customerNameQuery.toString(),
@@ -221,13 +257,24 @@ class ViewJobsHistoryFragment() : DialogFragment() {
                             "updatedDate" to FieldValue.serverTimestamp()
                         ))
                         .addOnSuccessListener {
-                            Toast.makeText(context, "Job history updated successfully!", Toast.LENGTH_SHORT).show()
-                            (activity as MainActivity).replaceFragment(jobHistoryFragment(), "Job History")
-                            navView.setCheckedItem(R.id.nav_jobHistory)
-                            super.onDismiss(requireDialog())
+//                            val handle = Handler()
+//                            handle.postDelayed({
+                                loading.isDismiss()
+                                handle.postDelayed({
+                                    Toast.makeText(context, "Job history updated successfully!", Toast.LENGTH_SHORT).show()
+                                    (activity as MainActivity).replaceFragment(jobHistoryFragment(), "Job History")
+                                    navView.setCheckedItem(R.id.nav_jobHistory)
+                                    super.onDismiss(requireDialog())
+                                }, 1000)
+
+//                            }, 2000)
+
                         }
                         .addOnFailureListener { exception ->
-                            Toast.makeText(context, "Error updating job!", Toast.LENGTH_SHORT).show()
+                            handle.postDelayed({
+                                loading.isDismiss()
+                            }, 1000)
+
                         }
                 }else{
                     Toast.makeText(context, "Some details are missing, Please check all fields!", Toast.LENGTH_SHORT).show()
@@ -296,8 +343,11 @@ class ViewJobsHistoryFragment() : DialogFragment() {
         alertDialogBuilder.setTitle("Delete Job History")
         alertDialogBuilder.setMessage("Are you sure you want to delete record?")
         alertDialogBuilder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-            deleteDocument()
+            try {
+                deleteDocument()
+            }catch (e:Exception){
 
+            }
         }
         alertDialogBuilder.setNegativeButton("No", { dialogInterface: DialogInterface, i: Int ->
             Toast.makeText(context, "Action Canceled", Toast.LENGTH_SHORT).show()
@@ -307,19 +357,28 @@ class ViewJobsHistoryFragment() : DialogFragment() {
     }
 
     private fun deleteDocument() {
-        Toast.makeText(context, dataRef.toString(), Toast.LENGTH_SHORT).show()
+//        Toast.makeText(context, dataRef.toString(), Toast.LENGTH_SHORT).show()
         // [START delete_document]
+        loading.startLoading()
         db.collection("createdJobs").document(dataRef.toString().trim())
             .delete()
             .addOnSuccessListener {
                 //Log.d(TAG, "Job record successfully deleted!")
-                Toast.makeText(context, "Job record successfully deleted!", Toast.LENGTH_SHORT).show()
-                (activity as MainActivity).replaceFragment(jobHistoryFragment(), "Job History")
-                navView.setCheckedItem(R.id.nav_jobHistory)
-                super.onDismiss(requireDialog())
+
+                    loading.isDismiss()
+                handle.postDelayed({
+                    Toast.makeText(context, "Job record successfully deleted!", Toast.LENGTH_SHORT).show()
+                    (activity as MainActivity).replaceFragment(jobHistoryFragment(), "Job History")
+                    navView.setCheckedItem(R.id.nav_jobHistory)
+                    super.onDismiss(requireDialog())
+                }, 1000)
+
             }
             .addOnFailureListener { e ->
                 //Log.w(TAG, "Error deleting document", e)
+                handle.postDelayed({
+                    loading.isDismiss()
+                }, 1000)
                 Toast.makeText(context, "Error deleting document!", Toast.LENGTH_SHORT).show()
             }
         // [END delete_document]
@@ -396,24 +455,7 @@ class ViewJobsHistoryFragment() : DialogFragment() {
     }
 
     private fun getAllListDetails() {
-        //Get Names of customers on view Created
-//        db.collection("customerNames")
-//            .get()
-//            .addOnSuccessListener { result ->
-//                val customersName = ArrayList<String>()
-//                for (document in result) {
-////                        Log.d(TAG, "${document.id} => ${document.data["name"]}")
-//                    customersName.add(document.data["name"].toString())
-//                }
-//
-//
-//                val arrayAdapter = ArrayAdapter(requireContext(), R.layout.customer_name_dropdown_items, customersName)
-//                vjhCustomerName.setAdapter(arrayAdapter)
-//
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.d(TAG, "Error getting documents: ", exception)
-//            }
+    try{
         //        Code to getting country list
         val countryNamesList = ArrayList<String>()
         val countriesList: MutableList<String> = ArrayList()
@@ -449,10 +491,18 @@ class ViewJobsHistoryFragment() : DialogFragment() {
             .addOnFailureListener { exception ->
                 Log.d(TAG, "Error getting documents: ", exception)
             }
+        }catch (e : IOException){
+            FancyToast.makeText(context, "Error while fetching data from database", FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show()
+        }
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
+        loading.isDismiss()
+
+        handle.postDelayed({
+            super.onDismiss(dialog)
+        }, 1000)
+
     }
 
 

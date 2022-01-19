@@ -6,11 +6,14 @@ package com.bjtmtech.servicejobtracker.ui
 
 
 import android.app.DatePickerDialog
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
+import android.os.Handler
+import android.text.TextUtils
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,11 +26,8 @@ import androidx.core.content.ContextCompat
 import com.bjtmtech.servicejobtracker.R
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.type.Date
-import kotlinx.android.synthetic.main.activity_register.*
+import com.shashank.sony.fancytoastlib.FancyToast
 import kotlinx.android.synthetic.main.fragment_create_job.*
-import kotlinx.android.synthetic.main.fragment_jobtype.*
-import kotlinx.android.synthetic.main.nav_header.*
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -62,9 +62,9 @@ class createJobFragment : Fragment(){
     private var param2: String? = null
     val db = Firebase.firestore
 
-    private var engineerEmailQuery: String? = null
-    private var engineerNameQuery: String? = null
-    private var engineerCountryQuery: String? = null
+    private lateinit var engineerEmailQuery: String
+    private lateinit var engineerNameQuery: String
+    private lateinit var engineerCountryQuery: String
 
     private var queryFirstName: String? = null
     private var queryLastName: String? = null
@@ -72,6 +72,8 @@ class createJobFragment : Fragment(){
 
 //    var sharedData : SharedPreferences = activity!!.getSharedPreferences("myProfile",Context.MODE_PRIVATE)
     private var PRIVATE_MODE = 0
+
+    val loading = LoadingDialog(this)
 //    private var firstRun : String = "myProfile"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -140,20 +142,20 @@ try{
         //                        Log.d(TAG, "${document.id} => ${document.data["name"]}")
                         jobTypesList.add(document.data["name"].toString())
                     }
-try{
+        try{
 
-                    val arrayAdapter = ArrayAdapter(context!!, R.layout.customer_name_dropdown_items, jobTypesList)
-                    cjJobType.setAdapter(arrayAdapter)
- }catch (e:Exception){
-                Log.e(TAG, e.printStackTrace().toString())
-            }
-                }
-                .addOnFailureListener { exception ->
-                    Log.d(TAG, "Error getting documents: ", exception)
-                }
-     }catch (e:Exception){
-                Log.e(TAG, e.printStackTrace().toString())
-            }
+                            val arrayAdapter = ArrayAdapter(context!!, R.layout.customer_name_dropdown_items, jobTypesList)
+                            cjJobType.setAdapter(arrayAdapter)
+         }catch (e:Exception){
+                        Log.e(TAG, e.printStackTrace().toString())
+                    }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.d(TAG, "Error getting documents: ", exception)
+                        }
+             }catch (e:Exception){
+                        Log.e(TAG, e.printStackTrace().toString())
+                    }
 
 
         val dataSetListenerStart = object: DatePickerDialog.OnDateSetListener{
@@ -219,10 +221,13 @@ try{
 
 
 //
+    isOnline(context!!)
 
     }
 
     private fun createJobRecord() {
+        if (isOnline(context!!)){
+
         val sdf = SimpleDateFormat("MMM dd,yyyy")
         val sdfwt = SimpleDateFormat("MMM dd,yyyy-HH-mm-ss")
         val sdfm = SimpleDateFormat("MMMM")
@@ -239,76 +244,107 @@ try{
         val jobStatusQuery = "ACTIVE"
 
 //Date formats
-        val createdYearQ = sdfy.format(timestamp).toString() //Used to Query database to check for active jobs
+        val createdYearQ =
+            sdfy.format(timestamp).toString() //Used to Query database to check for active jobs
         val createdDateQuery = sdf.format(timestamp).toString() //createdDate time stamp
 
 //      Check if there is an active job if yes prevent new job creation else allow job creation
-try{
-       db.collection("createdJobs")
-            .whereEqualTo("engineerEmail",engineerEmailQuery.toString())
-            .whereEqualTo("jobStatus","ACTIVE")
-            .whereEqualTo("createdYear",createdYearQ.toString())
-            .get()
-            .addOnSuccessListener { documents ->
+        try {
+            loading.startLoading()
+            db.collection("createdJobs")
+                .whereEqualTo("engineerEmail", engineerEmailQuery.toString())
+                .whereEqualTo("jobStatus", "ACTIVE")
+                .whereEqualTo("createdYear", createdYearQ.toString())
+                .get()
+                .addOnSuccessListener { documents ->
 //                check if document is equal to 0
-                if (documents.size() == 0) {
+                    if (documents.size() == 0) {
 
-                    //Check for empty input fields
-            if(customerNameQuery.isNotEmpty() && customerCountryQuery.isNotEmpty()
-                && customerStateQuery.isNotEmpty() && startDateQuery.isNotEmpty()
-                && stopDateQuery.isNotEmpty() && jobDurationQuery.isNotEmpty()
-                && engineerEmailQuery.toString().isNotEmpty() && engineerNameQuery.toString().isNotEmpty()
-                && engineerCountryQuery.toString().isNotEmpty()
-                && createdDateQuery.isNotEmpty() && jobTypeQuery.isNotEmpty()){
+                        //Check for empty input fields
+                        if (!TextUtils.isEmpty(customerNameQuery) && !TextUtils.isEmpty(customerCountryQuery)
+                            && !TextUtils.isEmpty(customerStateQuery) && !TextUtils.isEmpty(startDateQuery)
+                            && !TextUtils.isEmpty(stopDateQuery) && !TextUtils.isEmpty(jobDurationQuery)
+                            && !TextUtils.isEmpty(engineerEmailQuery.toString()) && !TextUtils.isEmpty(engineerNameQuery.toString())
+                            && !TextUtils.isEmpty(engineerCountryQuery.toString())
+                            && !TextUtils.isEmpty(createdDateQuery) && !TextUtils.isEmpty(jobTypeQuery)
+                        ) {
 
-                var docRef  = customerNameQuery.toString().split(" ")[0]+"-"+sdfwt.format(timestamp).toString().replace("\\s".toRegex(), "")
+                            var docRef =
+                                customerNameQuery.toString().split(" ")[0] + "-" + sdfwt.format(
+                                    timestamp
+                                ).toString().replace("\\s".toRegex(), "")
 //create a data map
-                val jobData = hashMapOf(
-                    "customerName" to customerNameQuery.toString(),
-                    "customerCountry" to customerCountryQuery.toString(),
-                    "customerState" to customerStateQuery.toString(),
-                    "startDate" to startDateQuery.toString(),
-                    "stopDate" to stopDateQuery.toString(),
-                    "jobDuration" to jobDurationQuery.toString(),
-                    "jobType" to jobTypeQuery.toString(),
-                    "engineerEmail" to engineerEmailQuery.toString(),
-                    "engineerName" to engineerNameQuery.toString(),
-                    "engineerCountry" to engineerCountryQuery.toString(),
-                    "createdDate" to createdDateQuery.toString(),
-                    "createdMonth" to createdMonth.toString(),
-                    "createdYear" to createdYear.toString(),
-                    "jobStatus" to jobStatusQuery.toString(),
-                    "id" to docRef.toString()
-                )
+                            val jobData = hashMapOf(
+                                "customerName" to customerNameQuery.toString(),
+                                "customerCountry" to customerCountryQuery.toString(),
+                                "customerState" to customerStateQuery.toString(),
+                                "startDate" to startDateQuery.toString(),
+                                "stopDate" to stopDateQuery.toString(),
+                                "jobDuration" to jobDurationQuery.toString(),
+                                "jobType" to jobTypeQuery.toString(),
+                                "engineerEmail" to engineerEmailQuery.toString(),
+                                "engineerName" to engineerNameQuery.toString(),
+                                "engineerCountry" to engineerCountryQuery.toString(),
+                                "createdDate" to createdDateQuery.toString(),
+                                "createdMonth" to createdMonth.toString(),
+                                "createdYear" to createdYear.toString(),
+                                "jobStatus" to jobStatusQuery.toString(),
+                                "id" to docRef.toString()
+                            )
 //Database Update query
 
-                db.collection("createdJobs").document(docRef.toString())
-                    .set(jobData)
-                    .addOnSuccessListener { documentReference ->
-                        Toast.makeText(context, "Job successfully created!", Toast.LENGTH_SHORT).show()
-                        clearField()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(context, "Error creating job!", Toast.LENGTH_SHORT).show()
-                    }
+                            db.collection("createdJobs").document(docRef.toString())
+                                .set(jobData)
+                                .addOnSuccessListener { documentReference ->
+                                    loading.isDismiss()
+                                    Toast.makeText(
+                                        context,
+                                        "Job successfully created!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    val handler = Handler()
+                                    handler.postDelayed({
+                                        clearField()
+                                    }, 2000)
 
-            }else{
-                Toast.makeText(context, "Some details are missing, Please check all fields!", Toast.LENGTH_SHORT).show()
-            }
+                                }
+                                .addOnFailureListener {
+                                    loading.isDismiss()
+                                    Toast.makeText(
+                                        context,
+                                        "Error creating job!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                        } else {
+                            loading.isDismiss()
+                            Toast.makeText(
+                                context,
+                                "Some details are missing, Please check all fields!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
 //feedback if result is greater than 0 meaning data exist
 
-                } else {
-
-                    Toast.makeText(context, "There Is Currently An Active Job! \nPlease [ COMPLETE / PEND /CANCEL ] \nTo Be Able To Create New Jobs", Toast.LENGTH_LONG).show()
+                    } else {
+                        loading.isDismiss()
+                        Toast.makeText(
+                            context,
+                            "There Is Currently An Active Job! \nPlease [ COMPLETE / PEND /CANCEL ] \nTo Be Able To Create New Jobs",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "get failed with ", exception)
-            }
-     }catch (e:Exception){
-                Log.e(TAG, e.printStackTrace().toString())
-            }
-
+                .addOnFailureListener { exception ->
+                    loading.isDismiss()
+                    Log.d(TAG, "get failed with ", exception)
+                }
+        } catch (e: Exception) {
+            loading.isDismiss()
+            Log.e(TAG, e.printStackTrace().toString())
+        }
+    }
     }
 
     private fun clearField() {
@@ -406,7 +442,28 @@ try{
 
     }
 
-
+    fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        FancyToast.makeText(context, "Error checking internet connection!", FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show()
+        return false
+    }
 
 
     companion object {

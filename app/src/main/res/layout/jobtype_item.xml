@@ -25,18 +25,18 @@
             android:padding="10dp"
             android:src="@drawable/img_2" />
 
-            <TextView
-                android:id="@+id/jtvId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="id"
-                android:textColor="@color/btnDanger"
-                android:textSize="13sp"
-                android:fontFamily="sans-serif"
-                android:textStyle="bold"
-                android:layout_toRightOf="@+id/imageView"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="12dp"/>
+        <TextView
+            android:id="@+id/jtvId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_toRightOf="@+id/imageView"
+            android:fontFamily="sans-serif"
+            android:text="id"
+            android:textColor="@color/btnDanger"
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
 
         <TextView
@@ -45,12 +45,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/jtvId"
             android:layout_marginLeft="20dp"
+            android:layout_toStartOf="@id/myButton"
+            android:layout_toEndOf="@id/imageView"
             android:layout_toRightOf="@id/imageView"
             android:fontFamily="sans-serif"
             android:text="Sample Job Type"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/myButton"

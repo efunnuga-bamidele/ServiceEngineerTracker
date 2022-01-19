@@ -20,6 +20,7 @@ import android.view.Menu
 import androidx.core.view.get
 import com.bjtmtech.servicejobtracker.R
 import com.bjtmtech.servicejobtracker.jobtypeFragment
+import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.firebase.firestore.ktx.firestore
 import java.util.*
 
@@ -35,7 +36,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var shared : SharedPreferences
     lateinit var navView: NavigationView
     var db = Firebase.firestore
-
+//
+//    private var appUpdate : AppUpdateManager? = null
         override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -43,6 +45,7 @@ class MainActivity : AppCompatActivity() {
 
 
         drawerLayout = findViewById(R.id.drawerLayout)
+
 
 
 
@@ -65,6 +68,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_dashboard -> replaceFragment(dashboardFragment(), it.title.toString())
                 R.id.nav_create_job -> replaceFragment(createJobFragment(), it.title.toString())
                 R.id.nav_view_active_job -> replaceFragment(activeJobFragment(), it.title.toString())
+
                 R.id.nav_jobHistory -> replaceFragment(jobHistoryFragment(), it.title.toString())
                 R.id.nav_jobType -> replaceFragment(jobtypeFragment(), it.title.toString())
 //                R.id.nav_language -> replaceFragment(languageFragment(), it.title.toString())
@@ -137,12 +141,12 @@ class MainActivity : AppCompatActivity() {
 
         val id = item.getItemId()
 
-        if (id == R.id.nav_language) {
-            replaceFragment(languageFragment(), "Language")
-//            to bring out action dialogbox
-//            navView.setCheckedItem(0)
-            return true
-        }
+//        if (id == R.id.nav_language) {
+//            replaceFragment(languageFragment(), "Language")
+////            to bring out action dialogbox
+////            navView.setCheckedItem(0)
+//            return true
+//        }
         return super.onOptionsItemSelected(item)
     }
 

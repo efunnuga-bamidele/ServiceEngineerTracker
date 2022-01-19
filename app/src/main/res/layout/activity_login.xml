@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="0dp">
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.LoginActivity">
 
     <TextView
         android:id="@+id/Logo_Text"
-        android:layout_width="411dp"
+        android:layout_width="0dp"
         android:layout_height="87dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="sans-serif-smallcaps"
         android:paddingBottom="0dp"
         android:text="occupancy"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display4"
-        android:textSize="70sp"
+        android:textSize="48sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -102,7 +109,7 @@
     <Button
         android:id="@+id/loginBtn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="65dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
@@ -118,8 +125,12 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?selectableItemBackground"
         android:text="Forget Password?"
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
+        android:textColor="@color/colorPurple"
+        app:layout_constraintBottom_toTopOf="@+id/copyRightViewLV"
         app:layout_constraintEnd_toStartOf="@+id/registerUser"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -133,20 +144,23 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:text="Register"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?selectableItemBackground"
         android:textAlignment="textEnd"
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
+        android:textColor="@color/colorPurple"
+        app:layout_constraintBottom_toTopOf="@+id/copyRightViewLV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/resetUser"
         app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/copyRightViewLV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="32dp"
-        android:text="Copyright @ 2021"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -168,3 +182,5 @@
         app:srcCompat="@drawable/logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

@@ -16,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
@@ -77,7 +76,7 @@ class activeJobFragment : Fragment(){
 
     private var PRIVATE_MODE = 0
     val db = Firebase.firestore
-
+    val loading = LoadingDialog(this)
 
 
 
@@ -115,7 +114,7 @@ class activeJobFragment : Fragment(){
 
 
 try {
-
+    loading.startLoading()
     db.collection("createdJobs").whereEqualTo("engineerEmail", engineerEmailQuery.toString())
         .whereEqualTo("jobStatus", "ACTIVE")
         .whereEqualTo("createdYear", currentYear)
@@ -123,7 +122,7 @@ try {
         .addOnSuccessListener { documents ->
             for (document in documents) {
                 dataRef = document.id
-//                    Toast.makeText(context, dataRef, Toast.LENGTH_SHORT).show()
+//                    FancyToast.makeText(context, dataRef, FancyToast.LENGTH_SHORT,FancyToast.INFO, true).show()
                 ajCustomerName.setText(document.data.get("customerName").toString())
                 ajCustomerCountry.setText(document.data.get("customerCountry").toString())
                 ajCustomerState.setText(document.data.get("customerState").toString())
@@ -131,18 +130,24 @@ try {
                 ajBtnStopDate.setText("STOP:\n" + document.data.get("stopDate").toString())
                 ajDateRangeText.setText(document.data.get("jobDuration").toString())
                 ajJobType.setText(document.data.get("jobType").toString())
+                loading.isDismiss()
             }
         }
         .addOnFailureListener { exception ->
             Log.w(TAG, "Error getting documents: ", exception)
+            loading.isDismiss()
         }
 }catch (e:Exception){
     Log.e(TAG, e.printStackTrace().toString())
+    loading.isDismiss()
 }
         var navView: NavigationView = (activity as MainActivity).findViewById(R.id.nav_view)
 
         ajCompleteJob.setOnClickListener {
+            if(isOnline(context!!)){
+
             try {
+                loading.startLoading()
                 val updateRef = db.collection("createdJobs").document(dataRef.toString())
                 updateRef
 //                .update("jobStatus", "COMPLETED")
@@ -154,82 +159,121 @@ try {
                     )
 
                     .addOnSuccessListener {
+                        loading.isDismiss()
 //                    Log.d(TAG, "Job completed successfully!")
                         (activity as MainActivity).replaceFragment(dashboardFragment(), "Dashboard")
                         navView.setCheckedItem(R.id.nav_dashboard)
-                        Toast.makeText(context, "Job completed successfully", Toast.LENGTH_SHORT)
+                        FancyToast.makeText(context, "Job completed successfully", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS, true)
                             .show()
                     }
 
                     .addOnFailureListener { e ->
+                        loading.isDismiss()
 //                    Log.w(TAG, "Error updating document", e)
-                        Toast.makeText(
+                        FancyToast.makeText(
                             context,
                             "Error completing job! Please try again",
-                            Toast.LENGTH_SHORT
+                            FancyToast.LENGTH_SHORT,FancyToast.ERROR, true
                         ).show()
                     }
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 Log.e(TAG, e.printStackTrace().toString())
             }
+        }
         }
 
         ajPendJob.setOnClickListener {
-            try{
-            val updateRef = db.collection("createdJobs").document(dataRef.toString())
-            updateRef
-                .update(mapOf(
-                    "jobStatus" to "PENDING",
-                    "updatedDate" to FieldValue.serverTimestamp()
-                ))
-                .addOnSuccessListener {
-//                    Log.d(TAG, "Job completed successfully!")
-                    (activity as MainActivity).replaceFragment(dashboardFragment(), "Dashboard")
-                    navView.setCheckedItem(R.id.nav_dashboard)
-                    Toast.makeText(context, "Job pended successfully", Toast.LENGTH_SHORT).show()
-                }
+            if(isOnline(context!!)){
 
-                .addOnFailureListener { e ->
+            try {
+                loading.startLoading()
+                val updateRef = db.collection("createdJobs").document(dataRef.toString())
+                updateRef
+                    .update(
+                        mapOf(
+                            "jobStatus" to "PENDING",
+                            "updatedDate" to FieldValue.serverTimestamp()
+                        )
+                    )
+                    .addOnSuccessListener {
+                        loading.isDismiss()
+//                    Log.d(TAG, "Job completed successfully!")
+                        (activity as MainActivity).replaceFragment(dashboardFragment(), "Dashboard")
+                        navView.setCheckedItem(R.id.nav_dashboard)
+                        FancyToast.makeText(context, "Job pended successfully", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS, true)
+                            .show()
+                    }
+
+                    .addOnFailureListener { e ->
+                        loading.isDismiss()
 //                    Log.w(TAG, "Error updating document", e)
-                    Toast.makeText(context, "Error pending job! Please try again", Toast.LENGTH_SHORT).show()
-                }
-            }catch (e:Exception){
+                        FancyToast.makeText(
+                            context,
+                            "Error pending job! Please try again",
+                            FancyToast.LENGTH_SHORT,FancyToast.ERROR, true
+                        ).show()
+                    }
+            } catch (e: Exception) {
+                loading.isDismiss()
                 Log.e(TAG, e.printStackTrace().toString())
             }
+        }
         }
 
         ajCancelJob.setOnClickListener {
-            try{
-            val updateRef = db.collection("createdJobs").document(dataRef.toString())
-            updateRef
-                .update(mapOf(
-                    "jobStatus" to "CANCELED",
-                    "updatedDate" to FieldValue.serverTimestamp()
-                ))
-                .addOnSuccessListener {
+            if (isOnline(context!!)) {
+                loading.startLoading()
+                try {
+                    val updateRef = db.collection("createdJobs").document(dataRef.toString())
+                    updateRef
+                        .update(
+                            mapOf(
+                                "jobStatus" to "CANCELED",
+                                "updatedDate" to FieldValue.serverTimestamp()
+                            )
+                        )
+                        .addOnSuccessListener {
+                            loading.isDismiss()
 //                    Log.d(TAG, "Job completed successfully!")
-                    (activity as MainActivity).replaceFragment(dashboardFragment(), "Dashboard")
-                    navView.setCheckedItem(R.id.nav_dashboard)
-                    Toast.makeText(context, "Job canceled successfully", Toast.LENGTH_SHORT).show()
-                }
+                            (activity as MainActivity).replaceFragment(
+                                dashboardFragment(),
+                                "Dashboard"
+                            )
+                            navView.setCheckedItem(R.id.nav_dashboard)
+                            FancyToast.makeText(context, "Job canceled successfully", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS, true)
+                                .show()
+                        }
 
-                .addOnFailureListener { e ->
+                        .addOnFailureListener { e ->
+                            loading.isDismiss()
 //                    Log.w(TAG, "Error updating document", e)
-                    Toast.makeText(context, "Error canceling job! Please try again", Toast.LENGTH_SHORT).show()
+                            FancyToast.makeText(
+                                context,
+                                "Error canceling job! Please try again",
+                                FancyToast.LENGTH_SHORT,FancyToast.ERROR, true
+                            ).show()
+                        }
+                } catch (e: Exception) {
+                    loading.isDismiss()
+                    Log.e(TAG, e.printStackTrace().toString())
                 }
-            }catch (e:Exception){
-                Log.e(TAG, e.printStackTrace().toString())
             }
         }
 
-        ajEditJob.setOnClickListener {
-            Toast.makeText(context, "Edit function is now enabled!", Toast.LENGTH_SHORT).show()
+        ajvEditJob.setOnClickListener {
+            loading.startLoading()
+            FancyToast.makeText(context, "Edit function is now enabled!", FancyToast.LENGTH_SHORT,FancyToast.INFO, true).show()
             enableInterfaceComponents()
             getAllListDetails()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ajBtnStopDate.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(),R.color.btnFaded))
+                ajBtnStopDate.setBackgroundTintList(
+                    ContextCompat.getColorStateList(
+                        requireContext(),
+                        R.color.btnFaded
+                    )
+                )
             }
-
+            loading.isDismiss()
         }
 
 
@@ -282,16 +326,17 @@ try {
         }
 
         ajUpdateJob.setOnClickListener {
-            var startDateQuery : String? = null
-            var stopDateQuery :String? = null
-            var customerNameQuery :String? = null
-            var customerCountryQuery :String? = null
-            var customerStateQuery :String? = null
-            var jobDurationQuery :String? = null
-            var jobTypeQuery :String? = null
+            if(isOnline(context!!)){
+            var startDateQuery: String? = null
+            var stopDateQuery: String? = null
+            var customerNameQuery: String? = null
+            var customerCountryQuery: String? = null
+            var customerStateQuery: String? = null
+            var jobDurationQuery: String? = null
+            var jobTypeQuery: String? = null
 
 
-            if (ajBtnStopDate.text.toString()  != "STOP"  ) {
+            if (ajBtnStopDate.text.toString() != "STOP") {
                 val customerNameQuery = ajCustomerName.text.toString()
                 val customerCountryQuery = ajCustomerCountry.text.toString()
                 val customerStateQuery = ajCustomerState.text.toString().capitalize()
@@ -299,7 +344,7 @@ try {
                 val jobTypeQuery = ajJobType.text.toString()
 
                 if (ajBtnStartDate.text.split(" ").size == 1) {
-                    Log.d(TAG, "one index "+ajBtnStartDate.text.split(" ").size )
+                    Log.d(TAG, "one index " + ajBtnStartDate.text.split(" ").size)
                     startDateQuery = ajBtnStartDate.text.split(":")[1].toString().trim()
                     stopDateQuery = ajBtnStopDate.text.split(":")[1].toString().trim()
 
@@ -307,48 +352,68 @@ try {
 
 
                 } else if (ajBtnStartDate.text.split(" ").size > 1) {
-                    Log.d(TAG, "two index "+ajBtnStartDate.text.split(" ").size)
+                    Log.d(TAG, "two index " + ajBtnStartDate.text.split(" ").size)
                     startDateQuery = ajBtnStartDate.text.split(":")[1].toString().trim()
                     stopDateQuery = ajBtnStopDate.text.split(":")[1].toString().trim()
 
-//                    Toast.makeText(context, "Reset Page with original data", Toast.LENGTH_SHORT).show()
+//                    FancyToast.makeText(context, "Reset Page with original data", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS, true).show()
 
                 }
-                if(customerNameQuery!!.isNotEmpty() && customerCountryQuery!!.isNotEmpty()
+                if (customerNameQuery!!.isNotEmpty() && customerCountryQuery!!.isNotEmpty()
                     && customerStateQuery!!.isNotEmpty() && startDateQuery!!.isNotEmpty()
                     && stopDateQuery!!.isNotEmpty() && jobDurationQuery!!.isNotEmpty()
-                    && jobTypeQuery!!.isNotEmpty()){
-try{
-                    db.collection("createdJobs").document(dataRef.toString())
-                        .update(mapOf(
-                            "customerName" to customerNameQuery.toString(),
-                            "customerCountry" to customerCountryQuery.toString(),
-                            "customerState" to customerStateQuery.toString(),
-                            "startDate" to startDateQuery.toString(),
-                            "stopDate" to stopDateQuery.toString(),
-                            "jobDuration" to jobDurationQuery.toString(),
-                            "jobType" to jobTypeQuery.toString(),
-                            "updatedDate" to FieldValue.serverTimestamp()
-                        ))
-                        .addOnSuccessListener {
-                            Toast.makeText(context, "Job updated created!", Toast.LENGTH_SHORT).show()
-                            (activity as MainActivity).replaceFragment(activeJobFragment(), "View Active Job")
-                            navView.setCheckedItem(R.id.nav_view_active_job)
-                        }
-                        .addOnFailureListener { exception ->
-                            Toast.makeText(context, "Error updating job!", Toast.LENGTH_SHORT).show()
-                        }
-     }catch (e:Exception){
-                Log.e(TAG, e.printStackTrace().toString())
-            }
-                }else{
-                    Toast.makeText(context, "Some details are missing, Please check all fields!", Toast.LENGTH_SHORT).show()
+                    && jobTypeQuery!!.isNotEmpty()
+                ) {
+                    try {
+                        loading.startLoading()
+                        db.collection("createdJobs").document(dataRef.toString())
+                            .update(
+                                mapOf(
+                                    "customerName" to customerNameQuery.toString(),
+                                    "customerCountry" to customerCountryQuery.toString(),
+                                    "customerState" to customerStateQuery.toString(),
+                                    "startDate" to startDateQuery.toString(),
+                                    "stopDate" to stopDateQuery.toString(),
+                                    "jobDuration" to jobDurationQuery.toString(),
+                                    "jobType" to jobTypeQuery.toString(),
+                                    "updatedDate" to FieldValue.serverTimestamp()
+                                )
+                            )
+                            .addOnSuccessListener {
+                                loading.isDismiss()
+                                FancyToast.makeText(context, "Job updated created!", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS, true)
+                                    .show()
+                                (activity as MainActivity).replaceFragment(
+                                    activeJobFragment(),
+                                    "View Active Job"
+                                )
+                                navView.setCheckedItem(R.id.nav_view_active_job)
+                            }
+                            .addOnFailureListener { exception ->
+                                loading.isDismiss()
+                                FancyToast.makeText(context, "Error updating job!", FancyToast.LENGTH_SHORT,FancyToast.ERROR, true)
+                                    .show()
+                            }
+                    } catch (e: Exception) {
+                        loading.isDismiss()
+                        Log.e(TAG, e.printStackTrace().toString())
+                    }
+                } else {
+                    FancyToast.makeText(
+                        context,
+                        "Some details are missing, Please check all fields!",
+                        FancyToast.LENGTH_SHORT,FancyToast.WARNING, true
+                    ).show()
                 }
-            }else{
-                Toast.makeText(context, "The start date, stop date and duration are not set", Toast.LENGTH_SHORT).show()
+            } else {
+                FancyToast.makeText(
+                    context,
+                    "The start date, stop date and duration are not set",
+                    FancyToast.LENGTH_SHORT,FancyToast.WARNING, true
+                ).show()
             }
 
-
+        }
 
         }
 
@@ -365,31 +430,18 @@ try{
                 connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
             if (capabilities != null) {
                 if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
-//                    Toast.makeText(context, "NetworkCapabilities.TRANSPORT_CELLULAR", Toast.LENGTH_SHORT).show()
-                    FancyToast.makeText(context,"NetworkCapabilities.TRANSPORT_CELLULAR",
-                        FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show()
-//                    val toast = FancyToast.makeText(
-//                        context,
-//                        "YNetworkCapabilities.TRANSPORT_CELLULAR", Toast.LENGTH_SHORT,FancyToast.SUCCESS,true
-//                    )
-//                    toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 150)
-//                    toast.show()
-
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
                     return true
                 } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
-                    Toast.makeText(context, "NetworkCapabilities.TRANSPORT_WIFI", Toast.LENGTH_SHORT).show()
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
                     return true
                 } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
-                    Toast.makeText(context, "NetworkCapabilities.TRANSPORT_ETHERNET", Toast.LENGTH_SHORT).show()
+//                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
                     return true
                 }
             }
         }
-        Toast.makeText(context, "NetworkCapabilities.False", Toast.LENGTH_SHORT).show()
-        Log.i("Internet", "NetworkCapabilities.False")
+        FancyToast.makeText(context, "Error checking internet connection!", FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show()
         return false
     }
 
@@ -406,7 +458,7 @@ try{
         startDay = sdf.format(calendar.time).split(".")[1].toInt()
         ajBtnStartDate.text = "Start: "+startDate
         if(ajBtnStartDate.text != "START"){
-//            Toast.makeText(context, "is not empty", Toast.LENGTH_SHORT).show()
+//            FancyToast.makeText(context, "is not empty", FancyToast.LENGTH_SHORT,FancyToast.SUCCESS, true).show()
             ajBtnStopDate.isEnabled = true
             ajBtnStopDate.isClickable = true
             ajBtnStopDate.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(),R.color.btnInverse))
@@ -434,7 +486,7 @@ try{
         val end = LocalDate.of(stopYear, stopMonth, stopDay)
 
         val days = ChronoUnit.DAYS.between(start, end) + 1
-//        Toast.makeText(context, "days $days",Toast.LENGTH_SHORT).show()
+//        FancyToast.makeText(context, "days $days",FancyToast.LENGTH_SHORT,FancyToast.SUCCESS, true).show()
         ajDateRangeText.text = days.toString()
     }
 
@@ -504,12 +556,15 @@ try{
 ///////////////////////////////////////////////
         ajCustomerCountry.isEnabled = true
         ajCustomerCountry.isClickable = true
+        ajCustomerCountry.isFocusable= true
 ///////////////////////////////////////////////
         ajCustomerState.isEnabled = true
         ajCustomerState.isClickable = true
+        ajCustomerState.isFocusable= true
 ///////////////////////////////////////////////
         ajJobType.isEnabled = true
         ajJobType.isClickable = true
+        ajJobType.isFocusable= true
 ///////////////////////////////////////////////
         ajBtnStartDate.isEnabled = true
         ajBtnStartDate.isClickable = true
@@ -521,7 +576,7 @@ try{
         ajCompleteJob.visibility = View.GONE
         ajCancelJob.visibility = View.GONE
         ajPendJob.visibility = View.GONE
-        ajEditJob.visibility = View.GONE
+        ajvEditJob.visibility = View.GONE
 ///////////////////////////////////////////////
         ajUpdateJob.visibility = View.VISIBLE
         ajCancelUpdate.visibility = View.VISIBLE
@@ -549,4 +604,8 @@ try{
                 }
             }
     }
+
+
+
+
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         <Button
             android:id="@+id/ajCancelUpdate"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="70dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -34,7 +34,7 @@
         <Button
             android:id="@+id/ajPendJob"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="70dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
@@ -131,7 +131,7 @@
         <Button
             android:id="@+id/ajBtnStartDate"
             android:layout_width="0dp"
-            android:layout_height="57dp"
+            android:layout_height="65dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -148,7 +148,7 @@
         <Button
             android:id="@+id/ajBtnStopDate"
             android:layout_width="0dp"
-            android:layout_height="57dp"
+            android:layout_height="65dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -188,7 +188,7 @@
         <TextView
             android:id="@+id/ajDateRangeText"
             android:layout_width="60dp"
-            android:layout_height="57dp"
+            android:layout_height="60dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -220,22 +220,22 @@
         <Button
             android:id="@+id/ajCompleteJob"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:text="Completed Job"
+            android:text="Complete Job"
             android:textSize="14sp"
             app:backgroundTint="@color/colorPurple"
             app:cornerRadius="4dp"
-            app:layout_constraintEnd_toStartOf="@+id/ajEditJob"
+            app:layout_constraintEnd_toStartOf="@+id/ajvEditJob"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider" />
 
         <Button
-            android:id="@+id/ajEditJob"
+            android:id="@+id/ajvEditJob"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
@@ -250,7 +250,7 @@
         <Button
             android:id="@+id/ajCancelJob"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="70dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
@@ -260,12 +260,12 @@
             app:cornerRadius="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ajPendJob"
-            app:layout_constraintTop_toBottomOf="@+id/ajEditJob" />
+            app:layout_constraintTop_toBottomOf="@+id/ajvEditJob" />
 
         <Button
             android:id="@+id/ajUpdateJob"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="70dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -283,4 +283,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</FrameLayout>
+</ScrollView>
